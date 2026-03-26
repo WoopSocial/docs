@@ -1,0 +1,1 @@
+This is the documentation repository of the WoopSocial API. It's deployed via Mintlify.
