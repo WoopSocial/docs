@@ -959,6 +959,7 @@ components:
           LINKEDIN:       "#/components/schemas/LinkedInSpecifics"
           LINKEDIN_PAGES: "#/components/schemas/LinkedInPagesSpecifics"
     PinterestSpecifics:
+      title: Pinterest
       type: object
       additionalProperties: false
       required:
@@ -977,6 +978,7 @@ components:
         - REEL
         - STORY
     InstagramSpecifics:
+      title: Instagram
       type: object
       additionalProperties: false
       required:
@@ -996,6 +998,7 @@ components:
         - VIDEO
         - REEL
     FacebookSpecifics:
+      title: Facebook
       type: object
       additionalProperties: false
       required:
@@ -1022,6 +1025,7 @@ components:
         - VIDEO
         - PHOTO
     TikTokSpecifics:
+      title: TikTok
       type: object
       additionalProperties: false
       required:
@@ -1064,6 +1068,7 @@ components:
         - private
         - unlisted
     YouTubeSpecifics:
+      title: YouTube
       type: object
       additionalProperties: false
       required:
@@ -1083,6 +1088,7 @@ components:
         madeForKids:
           type: boolean
     XSpecifics:
+      title: X (Twitter)
       type: object
       additionalProperties: false
       required:
@@ -1092,6 +1098,7 @@ components:
           type: string
           enum: [X]
     LinkedInSpecifics:
+      title: LinkedIn
       type: object
       additionalProperties: false
       required:
@@ -1101,6 +1108,7 @@ components:
           type: string
           enum: [LINKEDIN]
     LinkedInPagesSpecifics:
+      title: LinkedIn Pages
       type: object
       additionalProperties: false
       required:
