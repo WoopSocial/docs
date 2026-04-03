@@ -210,7 +210,7 @@ paths:
       description: |
         Returns platform-specific input options for a connected social account.
 
-        Use this endpoint to discover valid values for fields inside `platformSpecificData` when creating posts for Pinterest and TikTok.
+        Use this endpoint to discover valid values for fields inside `platformSpecifics` when creating posts for Pinterest and TikTok.
       parameters:
         - $ref: "#/components/parameters/SocialAccountId"
       responses:
@@ -443,7 +443,7 @@ components:
             Available Pinterest boards for this account.
 
             Each `id` value can be sent as
-            `platformSpecificData.pinterest.pinterestBoardId` when creating a post.
+            `platformSpecifics.pinterestBoardId` when creating a post.
           items:
             $ref: "#/components/schemas/PinterestBoardOption"
     PinterestBoardOption:
@@ -474,7 +474,7 @@ components:
           description: |
             Privacy values currently allowed for this TikTok account.
 
-            Each value can be sent as `platformSpecificData.tiktok.privacyLevel`
+            Each value can be sent as `platformSpecifics.privacyLevel`
             when creating a post.
           items:
             $ref: "#/components/schemas/TikTokPrivacyLevel"
@@ -540,6 +540,7 @@ components:
         - username
         - deliveryStatus
         - scheduledForUTC
+        - platformSpecifics
       properties:
         id:
           type: string
@@ -576,8 +577,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/PostMedia"
-        platformSpecificData:
-          $ref: "#/components/schemas/PlatformSpecificData"
+        platformSpecifics:
+          $ref: "#/components/schemas/PlatformSpecifics"
         externalPostId:
           type: string
           description: ID of the published post on the external social media platform.
@@ -724,6 +725,7 @@ components:
         - projectId
         - socialAccountId
         - scheduledForUTC
+        - platformSpecifics
       properties:
         idempotencyKey:
           type: string
@@ -750,8 +752,8 @@ components:
           items:
             type: string
           description: Media identifiers previously created via the external media upload flow.
-        platformSpecificData:
-          $ref: "#/components/schemas/PlatformSpecificData"
+        platformSpecifics:
+          $ref: "#/components/schemas/PlatformSpecifics"
     CreatePostsResponse:
       type: object
       additionalProperties: false
@@ -813,6 +815,7 @@ components:
       required:
         - id
         - scheduledForUTC
+        - platformSpecifics
       properties:
         id:
           type: string
@@ -832,8 +835,8 @@ components:
           items:
             type: string
           description: Media identifiers previously created via the media upload flow.
-        platformSpecificData:
-          $ref: "#/components/schemas/PlatformSpecificData"
+        platformSpecifics:
+          $ref: "#/components/schemas/PlatformSpecifics"
     UpdatePostsResponse:
       type: object
       additionalProperties: false
@@ -933,37 +936,38 @@ components:
           $ref: "#/components/schemas/DeletePostErrorCode"
         message:
           type: string
-    PlatformSpecificData:
-      type: object
-      description: |
-        Platform-specific publishing options.
-
-        At most one platform object may be present.
-
-        Some platforms, such as X, LinkedIn, and LinkedIn Pages, currently do
-        not define platform-specific options. For those platforms, this object
-        can be omitted or sent as an empty object.
-
-        The provided platform object must match the publishing account's platform.
-      additionalProperties: false
-      maxProperties: 1
-      properties:
-        pinterest:
-          $ref: "#/components/schemas/PinterestPostData"
-        instagram:
-          $ref: "#/components/schemas/InstagramPostData"
-        facebook:
-          $ref: "#/components/schemas/FacebookPostData"
-        tiktok:
-          $ref: "#/components/schemas/TikTokPostData"
-        youtube:
-          $ref: "#/components/schemas/YouTubePostData"
-    PinterestPostData:
+    PlatformSpecifics:
+      description: Platform-specific publishing options. The `platform` value must match the publishing account's platform.
+      oneOf:
+        - $ref: "#/components/schemas/PinterestSpecifics"
+        - $ref: "#/components/schemas/InstagramSpecifics"
+        - $ref: "#/components/schemas/FacebookSpecifics"
+        - $ref: "#/components/schemas/TikTokSpecifics"
+        - $ref: "#/components/schemas/YouTubeSpecifics"
+        - $ref: "#/components/schemas/XSpecifics"
+        - $ref: "#/components/schemas/LinkedInSpecifics"
+        - $ref: "#/components/schemas/LinkedInPagesSpecifics"
+      discriminator:
+        propertyName: platform
+        mapping:
+          PINTEREST:      "#/components/schemas/PinterestSpecifics"
+          INSTAGRAM:      "#/components/schemas/InstagramSpecifics"
+          FACEBOOK:       "#/components/schemas/FacebookSpecifics"
+          TIKTOK:         "#/components/schemas/TikTokSpecifics"
+          YOUTUBE:        "#/components/schemas/YouTubeSpecifics"
+          X:              "#/components/schemas/XSpecifics"
+          LINKEDIN:       "#/components/schemas/LinkedInSpecifics"
+          LINKEDIN_PAGES: "#/components/schemas/LinkedInPagesSpecifics"
+    PinterestSpecifics:
       type: object
       additionalProperties: false
       required:
+        - platform
         - pinterestBoardId
       properties:
+        platform:
+          type: string
+          enum: [PINTEREST]
         pinterestBoardId:
           type: string
     InstagramPostType:
@@ -972,12 +976,16 @@ components:
         - POST
         - REEL
         - STORY
-    InstagramPostData:
+    InstagramSpecifics:
       type: object
       additionalProperties: false
       required:
+        - platform
         - postType
       properties:
+        platform:
+          type: string
+          enum: [INSTAGRAM]
         postType:
           $ref: "#/components/schemas/InstagramPostType"
     FacebookPostType:
@@ -987,12 +995,16 @@ components:
         - IMAGE
         - VIDEO
         - REEL
-    FacebookPostData:
+    FacebookSpecifics:
       type: object
       additionalProperties: false
       required:
+        - platform
         - postType
       properties:
+        platform:
+          type: string
+          enum: [FACEBOOK]
         link:
           type: string
         postType:
@@ -1009,10 +1021,11 @@ components:
       enum:
         - VIDEO
         - PHOTO
-    TikTokPostData:
+    TikTokSpecifics:
       type: object
       additionalProperties: false
       required:
+        - platform
         - postType
         - privacyLevel
         - allowComment
@@ -1023,6 +1036,9 @@ components:
         - isBrandedContent
         - autoAddMusic
       properties:
+        platform:
+          type: string
+          enum: [TIKTOK]
         postType:
           $ref: "#/components/schemas/TikTokPostType"
         privacyLevel:
@@ -1047,10 +1063,15 @@ components:
         - public
         - private
         - unlisted
-    YouTubePostData:
+    YouTubeSpecifics:
       type: object
       additionalProperties: false
+      required:
+        - platform
       properties:
+        platform:
+          type: string
+          enum: [YOUTUBE]
         privacy:
           $ref: "#/components/schemas/YouTubePrivacy"
         category:
@@ -1061,6 +1082,33 @@ components:
             type: string
         madeForKids:
           type: boolean
+    XSpecifics:
+      type: object
+      additionalProperties: false
+      required:
+        - platform
+      properties:
+        platform:
+          type: string
+          enum: [X]
+    LinkedInSpecifics:
+      type: object
+      additionalProperties: false
+      required:
+        - platform
+      properties:
+        platform:
+          type: string
+          enum: [LINKEDIN]
+    LinkedInPagesSpecifics:
+      type: object
+      additionalProperties: false
+      required:
+        - platform
+      properties:
+        platform:
+          type: string
+          enum: [LINKEDIN_PAGES]
     HealthResponse:
       type: object
       additionalProperties: false
