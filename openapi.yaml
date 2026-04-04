@@ -765,29 +765,86 @@ components:
           description: Results in the same order as the request items.
           items:
             $ref: "#/components/schemas/CreatePostResult"
-    CreatePostResultStatus:
+    PostMutationResultStatus:
       type: string
       enum:
-        - CREATED
-        - FAILED
+        - SUCCESS
+        - FAILURE
     CreatePostResult:
+      oneOf:
+        - $ref: "#/components/schemas/CreatePostSuccessResult"
+        - $ref: "#/components/schemas/CreatePostFailureResult"
+      discriminator:
+        propertyName: status
+        mapping:
+          SUCCESS: "#/components/schemas/CreatePostSuccessResult"
+          FAILURE: "#/components/schemas/CreatePostFailureResult"
+    CreatePostSuccessResult:
+      title: Create Post Success
       type: object
       additionalProperties: false
       required:
         - idempotencyKey
         - status
+        - id
+        - validationWarnings
       properties:
+        status:
+          allOf:
+            - $ref: "#/components/schemas/PostMutationResultStatus"
+            - type: string
+              enum:
+                - SUCCESS
         idempotencyKey:
           type: string
           description: Item idempotency key echoed from the request.
-        status:
-          $ref: "#/components/schemas/CreatePostResultStatus"
         id:
           type: string
-          description: Created post identifier. Present only on success.
-        error:
-          $ref: "#/components/schemas/CreatePostItemError"
-    CreatePostItemErrorCode:
+          description: Created post identifier.
+        validationWarnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationWarning"
+          description: Structured validation warnings for this item. Empty when there are no warnings.
+    CreatePostFailureResult:
+      title: Create Post Failure
+      type: object
+      additionalProperties: false
+      required:
+        - idempotencyKey
+        - status
+        - code
+        - message
+        - validationErrors
+        - validationWarnings
+      properties:
+        status:
+          allOf:
+            - $ref: "#/components/schemas/PostMutationResultStatus"
+            - type: string
+              enum:
+                - FAILURE
+        idempotencyKey:
+          type: string
+          description: Item idempotency key echoed from the request.
+        code:
+          $ref: "#/components/schemas/CreatePostFailureCode"
+        message:
+          type: string
+          description: |
+            Human-readable summary of the failure.
+            When `code` is `VALIDATION_FAILED`, inspect `validationErrors` for the specific field-level errors.
+        validationErrors:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+          description: Structured validation errors for this item. Empty when there are no validation errors.
+        validationWarnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationWarning"
+          description: Structured validation warnings for this item. Empty when there are no warnings.
+    CreatePostFailureCode:
       type: string
       enum:
         - INVALID_PROJECT_ID
@@ -798,17 +855,6 @@ components:
         - INVALID_PLATFORM_SPECIFIC_DATA
         - VALIDATION_FAILED
         - INTERNAL_ERROR
-    CreatePostItemError:
-      type: object
-      additionalProperties: false
-      required:
-        - code
-        - message
-      properties:
-        code:
-          $ref: "#/components/schemas/CreatePostItemErrorCode"
-        message:
-          type: string
     UpdatePostItem:
       type: object
       additionalProperties: false
@@ -848,45 +894,120 @@ components:
           description: Results in the same order as the request items.
           items:
             $ref: "#/components/schemas/UpdatePostResult"
-    UpdatePostResultStatus:
-      type: string
-      enum:
-        - UPDATED
-        - FAILED
     UpdatePostResult:
+      oneOf:
+        - $ref: "#/components/schemas/UpdatePostSuccessResult"
+        - $ref: "#/components/schemas/UpdatePostFailureResult"
+      discriminator:
+        propertyName: status
+        mapping:
+          SUCCESS: "#/components/schemas/UpdatePostSuccessResult"
+          FAILURE: "#/components/schemas/UpdatePostFailureResult"
+    UpdatePostSuccessResult:
+      title: Update Post Success
       type: object
       additionalProperties: false
       required:
-        - id
         - status
+        - id
+        - validationWarnings
       properties:
+        status:
+          allOf:
+            - $ref: "#/components/schemas/PostMutationResultStatus"
+            - type: string
+              enum:
+                - SUCCESS
         id:
           type: string
           description: Post id echoed from the request.
+        validationWarnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationWarning"
+          description: Structured validation warnings for this item. Empty when there are no warnings.
+    UpdatePostFailureResult:
+      title: Update Post Failure
+      type: object
+      additionalProperties: false
+      required:
+        - status
+        - id
+        - code
+        - message
+        - validationErrors
+        - validationWarnings
+      properties:
         status:
-          $ref: "#/components/schemas/UpdatePostResultStatus"
-        post:
-          $ref: "#/components/schemas/Post"
-          description: Updated post. Present only on success.
-        error:
-          $ref: "#/components/schemas/UpdatePostError"
-    UpdatePostErrorCode:
+          allOf:
+            - $ref: "#/components/schemas/PostMutationResultStatus"
+            - type: string
+              enum:
+                - FAILURE
+        id:
+          type: string
+          description: Post id echoed from the request.
+        code:
+          $ref: "#/components/schemas/UpdatePostFailureCode"
+        message:
+          type: string
+          description: |
+            Human-readable summary of the failure.
+            When `code` is `VALIDATION_FAILED`, inspect `validationErrors` for the specific field-level errors.
+        validationErrors:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+          description: Structured validation errors for this item. Empty when there are no validation errors.
+        validationWarnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationWarning"
+          description: Structured validation warnings for this item. Empty when there are no warnings.
+    UpdatePostFailureCode:
       type: string
       enum:
         - POST_NOT_FOUND
         - POST_NOT_UPDATABLE
         - INVALID_MEDIA_ID
         - INVALID_PLATFORM_SPECIFIC_DATA
+        - VALIDATION_FAILED
         - INTERNAL_ERROR
-    UpdatePostError:
+    ValidationField:
+      type: string
+      enum:
+        - DESCRIPTION
+        - MEDIA
+        - PINTEREST_BOARD
+        - CONTENT
+        - TITLE
+        - FIRST_COMMENT
+        - TIKTOK_PRIVACY_LEVEL
+        - TIKTOK_CONTENT_DISCLOSURE
+        - YOUTUBE_PRIVACY
+        - YOUTUBE_CATEGORY
+        - YOUTUBE_TAGS
+        - SCHEDULE
+    ValidationError:
       type: object
       additionalProperties: false
       required:
-        - code
+        - field
         - message
       properties:
-        code:
-          $ref: "#/components/schemas/UpdatePostErrorCode"
+        field:
+          $ref: "#/components/schemas/ValidationField"
+        message:
+          type: string
+    ValidationWarning:
+      type: object
+      additionalProperties: false
+      required:
+        - field
+        - message
+      properties:
+        field:
+          $ref: "#/components/schemas/ValidationField"
         message:
           type: string
     DeletePostsResponse:
@@ -900,42 +1021,61 @@ components:
           description: Results in the same order as the request items.
           items:
             $ref: "#/components/schemas/DeletePostResult"
-    DeletePostResultStatus:
-      type: string
-      enum:
-        - DELETED
-        - FAILED
     DeletePostResult:
+      oneOf:
+        - $ref: "#/components/schemas/DeletePostSuccessResult"
+        - $ref: "#/components/schemas/DeletePostFailureResult"
+      discriminator:
+        propertyName: status
+        mapping:
+          SUCCESS: "#/components/schemas/DeletePostSuccessResult"
+          FAILURE: "#/components/schemas/DeletePostFailureResult"
+    DeletePostSuccessResult:
+      title: Delete Post Success
       type: object
       additionalProperties: false
       required:
-        - id
         - status
+        - id
       properties:
+        status:
+          allOf:
+            - $ref: "#/components/schemas/PostMutationResultStatus"
+            - type: string
+              enum:
+                - SUCCESS
         id:
           type: string
           description: Post id echoed from the request.
+    DeletePostFailureResult:
+      title: Delete Post Failure
+      type: object
+      additionalProperties: false
+      required:
+        - status
+        - id
+        - code
+        - message
+      properties:
         status:
-          $ref: "#/components/schemas/DeletePostResultStatus"
-        error:
-          $ref: "#/components/schemas/DeletePostError"
-    DeletePostErrorCode:
+          allOf:
+            - $ref: "#/components/schemas/PostMutationResultStatus"
+            - type: string
+              enum:
+                - FAILURE
+        id:
+          type: string
+          description: Post id echoed from the request.
+        code:
+          $ref: "#/components/schemas/DeletePostFailureCode"
+        message:
+          type: string
+    DeletePostFailureCode:
       type: string
       enum:
         - POST_NOT_FOUND
         - POST_NOT_DELETABLE
         - INTERNAL_ERROR
-    DeletePostError:
-      type: object
-      additionalProperties: false
-      required:
-        - code
-        - message
-      properties:
-        code:
-          $ref: "#/components/schemas/DeletePostErrorCode"
-        message:
-          type: string
     PlatformSpecifics:
       description: Platform-specific publishing options. The `platform` value must match the publishing account's platform.
       oneOf:
