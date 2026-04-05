@@ -424,11 +424,38 @@ components:
         platformSpecificInputs:
           $ref: "#/components/schemas/SocialAccountPlatformSpecificInputs"
     SocialAccountPlatformSpecificInputs:
+      oneOf:
+        - $ref: "#/components/schemas/PinterestSocialAccountPlatformSpecificInputs"
+        - $ref: "#/components/schemas/TikTokSocialAccountPlatformSpecificInputs"
+      discriminator:
+        propertyName: platform
+        mapping:
+          PINTEREST: "#/components/schemas/PinterestSocialAccountPlatformSpecificInputs"
+          TIKTOK: "#/components/schemas/TikTokSocialAccountPlatformSpecificInputs"
+    PinterestSocialAccountPlatformSpecificInputs:
+      title: Pinterest Social Account Platform Specific Inputs
       type: object
       additionalProperties: false
+      required:
+        - platform
+        - pinterest
       properties:
+        platform:
+          type: string
+          enum: [PINTEREST]
         pinterest:
           $ref: "#/components/schemas/PinterestAccountPlatformInputs"
+    TikTokSocialAccountPlatformSpecificInputs:
+      title: TikTok Social Account Platform Specific Inputs
+      type: object
+      additionalProperties: false
+      required:
+        - platform
+        - tiktok
+      properties:
+        platform:
+          type: string
+          enum: [TIKTOK]
         tiktok:
           $ref: "#/components/schemas/TikTokAccountPlatformInputs"
     PinterestAccountPlatformInputs:
