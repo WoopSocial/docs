@@ -2,6 +2,14 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "WoopSocial",
+  "contextual": {
+    "options": [
+      "copy",
+      "chatgpt",
+      "claude",
+      "perplexity"
+    ]
+  },
   "colors": {
     "primary": "#F18B20",
     "light": "#F9B96A",
