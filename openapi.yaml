@@ -17,6 +17,8 @@ tags:
     description: Connected social account discovery endpoints.
   - name: Media
     description: Media upload endpoints.
+  - name: Webhooks
+    description: Webhook endpoint management.
   - name: Health
     description: Basic connectivity endpoints.
 paths:
@@ -317,6 +319,74 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UploadSessionStatus"
+  /webhooks:
+    post:
+      operationId: createWebhookEndpoint
+      tags:
+        - Webhooks
+      security:
+        - BearerAuth: []
+      summary: Register webhook endpoint
+      description: |
+        Registers a URL to receive webhook events for the specified event types.
+
+        The response includes a `signingSecret` (base64-encoded, 32 bytes) that is
+        returned **once only**. Use it to verify the `X-Woop-Signature` header on
+        incoming webhook payloads.
+
+        **Signature format:** `t=<unix>,v1=<hmac-sha256-hex>`
+        **Signed payload:** `<unix>.<json-body>`
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateWebhookEndpointRequest"
+      responses:
+        "201":
+          description: Webhook endpoint registered.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhookEndpoint"
+        "422":
+          description: Validation error (unknown event type, empty url, etc.).
+    get:
+      operationId: listWebhookEndpoints
+      tags:
+        - Webhooks
+      security:
+        - BearerAuth: []
+      summary: List webhook endpoints
+      description: Returns all registered webhook endpoints for the organization. The `signingSecret` field is omitted.
+      responses:
+        "200":
+          description: Webhook endpoints.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WebhookEndpoint"
+  /webhooks/{webhookId}:
+    delete:
+      operationId: deleteWebhookEndpoint
+      tags:
+        - Webhooks
+      security:
+        - BearerAuth: []
+      summary: Delete webhook endpoint
+      parameters:
+        - name: webhookId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Endpoint deleted.
+        "404":
+          description: Endpoint not found.
   /health:
     get:
       operationId: getHealth
@@ -376,6 +446,81 @@ components:
       scheme: bearer
       bearerFormat: API key
   schemas:
+    WebhookEventType:
+      type: string
+      enum:
+        - socialAccountPost.delivery.succeeded
+        - socialAccountPost.delivery.failed
+    CreateWebhookEndpointRequest:
+      type: object
+      required:
+        - url
+        - eventTypes
+      properties:
+        url:
+          type: string
+          description: The HTTPS URL to POST webhook events to.
+        eventTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/WebhookEventType"
+          minItems: 1
+    WebhookEndpoint:
+      type: object
+      required:
+        - id
+        - url
+        - eventTypes
+        - createdAt
+      properties:
+        id:
+          type: string
+          description: Webhook endpoint identifier (int64 as string).
+        url:
+          type: string
+        eventTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/WebhookEventType"
+        createdAt:
+          type: string
+          format: date-time
+        signingSecret:
+          type: string
+          description: Base64-encoded 32-byte signing secret. Returned once on creation only.
+    WebhookEvent:
+      type: object
+      description: Payload delivered to registered webhook URLs.
+      required:
+        - eventType
+        - occurredAt
+        - postId
+        - accountPostId
+        - socialAccountId
+        - platform
+      properties:
+        eventType:
+          $ref: "#/components/schemas/WebhookEventType"
+        occurredAt:
+          type: string
+          format: date-time
+        postId:
+          type: string
+        accountPostId:
+          type: string
+        socialAccountId:
+          type: string
+        platform:
+          $ref: "#/components/schemas/SocialPlatform"
+        externalPostId:
+          type: string
+          description: Platform's own post identifier. Present on succeeded events.
+        externalPostUrl:
+          type: string
+          description: Public URL of the post on the platform. Present on succeeded events.
+        errorMessage:
+          type: string
+          description: Error detail. Present on failed events.
     Project:
       type: object
       additionalProperties: false
@@ -746,7 +891,7 @@ components:
             All referenced social accounts must belong to the same project.
             Duplicate `socialAccountId` values are invalid.
           items:
-            $ref: "#/components/schemas/SocialAccountTargetInput"
+            $ref: "#/components/schemas/SocialAccountInput"
     Post:
       type: object
       additionalProperties: false
@@ -960,7 +1105,7 @@ components:
           type: string
           enum:
             - ABORTED
-    SocialAccountTargetInput:
+    SocialAccountInput:
       oneOf:
         - $ref: "#/components/schemas/PinterestInput"
         - $ref: "#/components/schemas/InstagramInput"
