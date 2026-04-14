@@ -640,7 +640,7 @@ components:
           format: date-time
         postId:
           type: string
-        accountPostId:
+        socialAccountPostId:
           type: string
         socialAccountId:
           type: string
