@@ -583,7 +583,7 @@ components:
     WebhookEventType:
       type: string
       enum:
-        - socialAccountPost.delivery.succeeded
+        - socialAccountPost.delivery.published
         - socialAccountPost.delivery.failed
     CreateWebhookEndpointRequest:
       type: object
@@ -684,7 +684,9 @@ components:
         - TIKTOK
         - X
         - YOUTUBE
-      description: Social platform supported by WoopSocial.
+        - WOOPTEST
+      description: |
+        `WOOPTEST` is a sandbox platform for testing and debugging. Posts targeting `WOOPTEST` go through the full scheduling pipeline but are never published to any real social network.
     CreateOAuthAuthorizationRequest:
       type: object
       additionalProperties: false
@@ -838,12 +840,12 @@ components:
 
         `NOT_STARTED`: The post exists and is scheduled, but delivery has not started yet.
         `SENDING`: Delivery is currently in progress.
-        `SENT`: Delivery completed successfully.
+        `PUBLISHED`: Delivery completed successfully.
         `FAILED`: Delivery completed unsuccessfully.
       enum:
         - NOT_STARTED
         - SENDING
-        - SENT
+        - PUBLISHED
         - FAILED
     PostContentMediaInput:
       description: |
@@ -1263,6 +1265,7 @@ components:
         - $ref: "#/components/schemas/XInput"
         - $ref: "#/components/schemas/LinkedInInput"
         - $ref: "#/components/schemas/LinkedInPagesInput"
+        - $ref: "#/components/schemas/WoopTestInput"
       discriminator:
         propertyName: platform
         mapping:
@@ -1274,6 +1277,7 @@ components:
           X: "#/components/schemas/XInput"
           LINKEDIN: "#/components/schemas/LinkedInInput"
           LINKEDIN_PAGES: "#/components/schemas/LinkedInPagesInput"
+          WOOPTEST: "#/components/schemas/WoopTestInput"
     SocialAccountInputBase:
       type: object
       required:
@@ -1329,7 +1333,7 @@ components:
         deliveryCompletedAt:
           type: string
           format: date-time
-          description: UTC time when the latest delivery attempt for this social account post completed both for successful (`SENT`) and unsuccessful (`FAILED`) terminal `deliveryStatus` values.
+          description: UTC time when the latest delivery attempt for this social account post completed both for successful (`PUBLISHED`) and unsuccessful (`FAILED`) terminal `deliveryStatus` values.
         externalPostId:
           type: string
         externalPostUrl:
@@ -1579,6 +1583,7 @@ components:
         - $ref: "#/components/schemas/XPost"
         - $ref: "#/components/schemas/LinkedInPost"
         - $ref: "#/components/schemas/LinkedInPagesPost"
+        - $ref: "#/components/schemas/WoopTestPost"
       discriminator:
         propertyName: platform
         mapping:
@@ -1590,6 +1595,7 @@ components:
           X: "#/components/schemas/XPost"
           LINKEDIN: "#/components/schemas/LinkedInPost"
           LINKEDIN_PAGES: "#/components/schemas/LinkedInPagesPost"
+          WOOPTEST: "#/components/schemas/WoopTestPost"
     PinterestPost:
       title: Pinterest
       allOf:
@@ -1635,6 +1641,39 @@ components:
       allOf:
         - $ref: "#/components/schemas/LinkedInPagesPlatform"
         - $ref: "#/components/schemas/SocialAccountPostBase"
+    WoopTestPlatform:
+      type: object
+      required:
+        - platform
+      properties:
+        platform:
+          allOf:
+            - $ref: "#/components/schemas/SocialPlatform"
+            - type: string
+              enum:
+                - WOOPTEST
+    WoopTestFields:
+      type: object
+      properties:
+        shouldSucceed:
+          type: boolean
+          default: true
+          description: |
+            Whether the simulated delivery should succeed or fail.
+
+            Defaults to `true`. Set to `false` to simulate a delivery failure.
+    WoopTestInput:
+      title: WoopTest
+      allOf:
+        - $ref: "#/components/schemas/WoopTestPlatform"
+        - $ref: "#/components/schemas/SocialAccountInputBase"
+        - $ref: "#/components/schemas/WoopTestFields"
+    WoopTestPost:
+      title: WoopTest
+      allOf:
+        - $ref: "#/components/schemas/WoopTestPlatform"
+        - $ref: "#/components/schemas/SocialAccountPostBase"
+        - $ref: "#/components/schemas/WoopTestFields"
     ValidationError:
       type: object
       additionalProperties: false
