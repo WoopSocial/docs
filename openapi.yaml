@@ -278,6 +278,7 @@ paths:
   /media:
     post:
       operationId: createMedia
+      x-woopsocial-mcp-exclude: true
       tags:
         - Media
       security:
