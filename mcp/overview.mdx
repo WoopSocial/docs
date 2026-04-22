@@ -1,0 +1,52 @@
+---
+title: "MCP Overview"
+description: "Connect AI assistants and autonomous agents to WoopSocial through Model Context Protocol"
+---
+
+# WoopSocial MCP
+
+WoopSocial exposes a Model Context Protocol (MCP) server so AI assistants and autonomous agents can manage social content with structured tools instead of ad hoc HTTP calls.
+
+<Note>
+  Create your API key in [WoopSocial dashboard -> API](https://app.woopsocial.com/api-access). MCP uses the same API key and permissions as the REST API.
+</Note>
+
+## Endpoint
+
+| Item | Value |
+| --- | --- |
+| **MCP URL** | `https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY` |
+| **Transport** | Streamable HTTP |
+
+<Warning>
+  Treat API keys like production passwords. They can publish posts, delete content, and disconnect accounts when tools are invoked.
+</Warning>
+
+## What the server does
+
+The WoopSocial MCP server mirrors the same core capabilities as API v1:
+
+* **Projects** - discover the projects available to the authenticated key.
+* **Social Accounts** - list connected profiles and their platform-specific input options.
+* **Posts** - create, list, read, validate, and delete scheduled content.
+* **Media** - upload files and manage media attached to posts.
+* **Webhooks** - register delivery callbacks for post events.
+* **Health** - verify connectivity.
+
+## Relationship to the REST API
+
+* **Parity**: MCP tools use the same backend logic as `https://api.woopsocial.com/v1`.
+* **Choose MCP** when you want your AI agent to talk to WoopSocial.
+* **Choose REST** for servers, webhooks, mobile apps.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Client setup" icon="laptop" href="/mcp/integrating-clients">
+    Claude Desktop, Claude Code, Cursor, and other Streamable HTTP clients.
+  </Card>
+
+  <Card title="Tools reference" icon="wrench" href="/mcp/tools-reference">
+    Full list of MCP tool names grouped by domain.
+  </Card>
+</CardGroup>

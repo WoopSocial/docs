@@ -26,6 +26,14 @@
             "pages": [
               "index"
             ]
+          },
+          {
+            "group": "MCP",
+            "pages": [
+              "mcp/overview",
+              "mcp/integrating-clients",
+              "mcp/tools-reference"
+            ]
           }
         ]
       },
