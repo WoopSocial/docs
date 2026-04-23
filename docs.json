@@ -26,14 +26,6 @@
             "pages": [
               "index"
             ]
-          },
-          {
-            "group": "MCP",
-            "pages": [
-              "mcp/overview",
-              "mcp/integrating-clients",
-              "mcp/tools-reference"
-            ]
           }
         ]
       },
@@ -45,6 +37,19 @@
             "group": "Overview",
             "pages": [
               "api-reference/overview"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "MCP Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "mcp/overview",
+              "mcp/integrating-clients",
+              "mcp/tools-reference"
             ]
           }
         ]
