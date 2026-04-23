@@ -1,4 +1,105 @@
 ---
 title: "Integrating MCP Clients"
-description: "Set up Claude Desktop, Claude Code, Cursor, and other MCP clients with WoopSocial"
+description: "Set up Claude Desktop, Claude Code, Cursor, ChatGPT, and other MCP clients with WoopSocial"
 ---
+
+# Integrating MCP clients
+
+Use this page to connect the WoopSocial MCP server to a client that supports streamable HTTP MCP.
+
+## Prerequisites
+
+- An active WoopSocial API key
+- Access to the client you want to configure
+
+## Get your MCP URL
+
+1. Open the [WoopSocial dashboard API page](https://app.woopsocial.com/api-access).
+
+2. Click on the "Create API key" button.
+
+3. Give the key a name so you can identify it later.
+
+<img src="/images/social-media-mcp/API%20Name%20Social%20Media%20MCP.png" alt="Name the API key" />
+
+4. Copy the MCP URL from the key details page.
+
+<img src="/images/social-media-mcp/Social%20Media%20MCP%20Link.png" alt="Copy the MCP URL from the API key details page" />
+
+The MCP URL uses this format:
+
+```
+https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY
+```
+
+
+## Claude Code CLI
+
+Use the `claude mcp add` command to register WoopSocial with Claude Code.
+
+```bash
+claude mcp add --transport http woopsocial "https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY"
+```
+
+## Codex CLI
+
+Use the `codex mcp add` command to register WoopSocial with Codex.
+
+```bash
+codex mcp add woopsocial --url "https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY"
+```
+
+## Claude Desktop
+
+1. Open Claude settings.
+
+<img src="/images/social-media-mcp/Claude%20Social%20Media%20MCP%20setup%20image%201.png" alt="Open Claude settings" />
+
+2. Open the `Connectors` tab.
+
+<img src="/images/social-media-mcp/Claude%20Social%20Media%20MCP%20setup%20image%202.png" alt="Open the Connectors tab in Claude" />
+
+3. Select `Add custom connector`.
+
+<img src="/images/social-media-mcp/Claude%20Social%20Media%20MCP%20setup%20image%203.png" alt="Add a custom connector in Claude" />
+
+4. Enter a connector name and paste the MCP URL.
+
+<img src="/images/social-media-mcp/Claude%20Social%20Media%20MCP%20setup%20image%204.png" alt="Enter the connector name and MCP URL" />
+
+5. Save the connector.
+6. Test the connection by asking Claude to list your social accounts.
+
+<img src="/images/social-media-mcp/Claude%20Social%20Media%20MCP%20setup%20image%205.png" alt="Test the Claude connector by listing social accounts" />
+
+If Claude blocks media uploads, add `*.cloudflarestorage.com` to the allowlist in its settings.
+
+## ChatGPT
+
+1. Open `Settings`.
+
+<img src="/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%201.png" alt="Open ChatGPT settings" />
+
+2. Open `Apps`.
+3. Enable `Developer Mode` if it is not already enabled.
+
+<img src="/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%202.png" alt="Enable Developer Mode in ChatGPT" />
+
+4. Select `Create App`.
+5. Enter these values:
+
+- Name: `WoopSocial`
+- Description: `Publish social media content`
+- MCP Server URL: paste the MCP URL you copied earlier
+- Authentication: `No Auth`
+
+<img src="/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%203.png" alt="Create the WoopSocial app in ChatGPT" />
+
+6. Save the app.
+7. Start a new chat and test the connection by asking ChatGPT to list your social accounts.
+
+<img src="/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%204.png" alt="Test the ChatGPT app by listing social accounts" />
+
+# Note
+
+If the client has an allowlist for outbound domains, add `*.cloudflarestorage.com` so media uploads work.
