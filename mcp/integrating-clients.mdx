@@ -29,12 +29,34 @@ claude mcp add --transport http woopsocial "https://api.woopsocial.com/mcp"
 7. Return to Claude
 8. Ask Claude to do something with the MCP. For example tell it to "List my social accounts in woopsocial"
 
+## Get your MCP URL
+
+Claude Code above used our OAuth-based MCP authentication but this is not yet compatible with all AI agents. In such cases, please follow the procedure below which will generate an MCP URL for you backed by an API key.
+
+1. Open the [WoopSocial dashboard API page](https://app.woopsocial.com/api-access).
+
+2. Click on the "Create API key" button.
+
+3. Give the key a name so you can identify it later.
+
+<img src="/images/social-media-mcp/API%20Name%20Social%20Media%20MCP.png" alt="Name the API key" />
+
+4. Copy the MCP URL from the key details page.
+
+<img src="/images/social-media-mcp/Social%20Media%20MCP%20Link.png" alt="Copy the MCP URL from the API key details page" />
+
+The MCP URL uses this format:
+
+```
+https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY
+```
+
 ## Codex CLI
 
 Use the `codex mcp add` command to register WoopSocial with Codex.
 
 ```bash
-codex mcp add woopsocial --url "https://api.woopsocial.com/mcp"
+codex mcp add woopsocial --url "https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY"
 ```
 
 ## Claude Desktop
