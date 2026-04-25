@@ -365,6 +365,7 @@ paths:
   /media/upload-sessions/{uploadSessionId}/complete:
     post:
       operationId: completeUploadSession
+      x-woopsocial-mcp-description: Completes the upload session started by `createUploadSession`.
       tags:
         - Media
       security:

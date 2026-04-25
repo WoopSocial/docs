@@ -15,7 +15,7 @@ description: "Tool names exposed by the WoopSocial MCP server"
 
 | Tool | Description |
 | --- | --- |
-| <code>completeUploadSession</code> | Call this to finalize the upload started by calling [`/media/upload-sessions`](/api-reference/media/start-media-upload-session). |
+| <code>completeUploadSession</code> | Completes the upload session started by `createUploadSession`. |
 | <code>createUploadSession</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts. |
 | <code>getUploadSession</code> | Get media upload session status |
 
