@@ -1437,6 +1437,7 @@ components:
       properties:
         pinterestBoardId:
           type: string
+          description: Identifier of the board to pin to.
         title:
           type: string
     InstagramFields:
@@ -1463,7 +1464,6 @@ components:
         - allowComment
         - allowDuet
         - allowStitch
-        - contentDisclosureEnabled
         - isYourBrand
         - isBrandedContent
         - autoAddMusic
@@ -1493,9 +1493,6 @@ components:
 
             When `postType=PHOTO`, this field is required by the API contract
             but is not used by TikTok.
-        contentDisclosureEnabled:
-          type: boolean
-          description: Whether TikTok content disclosure should be enabled for this post.
         isYourBrand:
           type: boolean
           description: Whether the post should be disclosed as "Your brand" content on TikTok.

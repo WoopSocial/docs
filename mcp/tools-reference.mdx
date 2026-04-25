@@ -15,7 +15,7 @@ description: "Tool names exposed by the WoopSocial MCP server"
 
 | Tool | Description |
 | --- | --- |
-| <code>completeUploadSession</code> | - |
+| <code>completeUploadSession</code> | Call this to finalize the upload started by calling [`/media/upload-sessions`](/api-reference/media/start-media-upload-session). |
 | <code>createUploadSession</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts. |
 | <code>getUploadSession</code> | - |
 
@@ -23,7 +23,7 @@ description: "Tool names exposed by the WoopSocial MCP server"
 
 | Tool | Description |
 | --- | --- |
-| <code>createPost</code> | Creates one post resource with one or more social-account targets. |
+| <code>createPost</code> | Creates a post with one or more social-account targets. |
 | <code>deletePost</code> | Deletes one scheduled post by post ID. |
 | <code>getPost</code> | Returns one post with its social account posts inline. |
 | <code>listSocialAccountPosts</code> | Returns standalone social account posts for the API key's organization. |
