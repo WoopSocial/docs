@@ -5,29 +5,15 @@ description: "Tool names exposed by the WoopSocial MCP server"
 
 # MCP Tools Reference
 
-## Health
-
-| Tool | Description |
-| --- | --- |
-| <code>getHealth</code> | Returns a minimal response proving the WoopSocial API is reachable. |
-
-## Media
-
-| Tool | Description |
-| --- | --- |
-| <code>completeUploadSession</code> | Completes the upload session started by `createUploadSession`. |
-| <code>createUploadSession</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts. |
-| <code>getUploadSession</code> | Get media upload session status |
-
 ## Posts
 
 | Tool | Description |
 | --- | --- |
 | <code>createPost</code> | Creates a post with one or more social-account targets. |
-| <code>deletePost</code> | Deletes one scheduled post by post ID. |
-| <code>getPost</code> | Returns one post with its social account posts inline. |
-| <code>listSocialAccountPosts</code> | Returns standalone social account posts for the API key's organization. |
 | <code>validatePost</code> | Validates a post request without creating a post. |
+| <code>getPost</code> | Returns one post with its social account posts inline. |
+| <code>deletePost</code> | Deletes one scheduled post by post ID. |
+| <code>listSocialAccountPosts</code> | Returns standalone social account posts for the API key's organization. |
 
 ## Projects
 
@@ -40,13 +26,27 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | Tool | Description |
 | --- | --- |
 | <code>createOAuthAuthorization</code> | Generates a browser authorization URL for connecting a new social account to a project. Open the returned `url` in a browser to complete the platform-specific OAuth flow. |
-| <code>getSocialAccountPlatformInputs</code> | Returns platform-specific input options for a connected social account. |
 | <code>listSocialAccounts</code> | Returns social accounts that can currently be used for publishing. |
+| <code>getSocialAccountPlatformInputs</code> | Returns platform-specific input options for a connected social account. |
+
+## Media
+
+| Tool | Description |
+| --- | --- |
+| <code>createUploadSession</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts. |
+| <code>getUploadSession</code> | Get media upload session status |
+| <code>completeUploadSession</code> | Completes the upload session started by `createUploadSession`. |
 
 ## Webhooks
 
 | Tool | Description |
 | --- | --- |
 | <code>createWebhookEndpoint</code> | Registers a URL to receive webhook events for the specified event types. |
-| <code>deleteWebhookEndpoint</code> | Delete webhook endpoint |
 | <code>listWebhookEndpoints</code> | Returns all registered webhook endpoints for the organization. The `signingSecret` field is omitted. |
+| <code>deleteWebhookEndpoint</code> | Delete webhook endpoint |
+
+## Health
+
+| Tool | Description |
+| --- | --- |
+| <code>getHealth</code> | Returns a minimal response proving the WoopSocial API is reachable. |
