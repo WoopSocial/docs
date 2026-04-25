@@ -70,7 +70,7 @@ paths:
         - ApiKey: []
       summary: Validate post
       description: |
-        Validates a post request without creating a post.
+        Validates a post without creating one.
 
         This endpoint applies the same validation rules as `POST /posts`,
         including social-account resolution, platform-specific validation, and
