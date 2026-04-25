@@ -17,7 +17,7 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | --- | --- |
 | <code>completeUploadSession</code> | Call this to finalize the upload started by calling [`/media/upload-sessions`](/api-reference/media/start-media-upload-session). |
 | <code>createUploadSession</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts. |
-| <code>getUploadSession</code> | - |
+| <code>getUploadSession</code> | Get media upload session status |
 
 ## Posts
 
@@ -48,5 +48,5 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | Tool | Description |
 | --- | --- |
 | <code>createWebhookEndpoint</code> | Registers a URL to receive webhook events for the specified event types. |
-| <code>deleteWebhookEndpoint</code> | - |
+| <code>deleteWebhookEndpoint</code> | Delete webhook endpoint |
 | <code>listWebhookEndpoints</code> | Returns all registered webhook endpoints for the organization. The `signingSecret` field is omitted. |
