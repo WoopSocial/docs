@@ -29,6 +29,17 @@ claude mcp add --transport http woopsocial "https://api.woopsocial.com/mcp"
 7. Return to Claude
 8. Ask Claude to do something with the MCP. For example tell it to "List my social accounts in woopsocial"
 
+## Codex CLI
+
+Use the `codex mcp add` command to register WoopSocial with Codex. 
+
+```bash
+codex mcp add woopsocial --url https://api.woopsocial.com/mcp
+codex mcp login woopsocial
+```
+
+This should take you to WoopSocial where you can Authorize the MCP connection. Click the "Authorize" button.
+
 ## Get your MCP URL
 
 Claude Code above used our OAuth-based MCP authentication but this is not yet compatible with all AI agents. In such cases, please follow the procedure below which will generate an MCP URL for you backed by an API key.
@@ -49,14 +60,6 @@ The MCP URL uses this format:
 
 ```
 https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY
-```
-
-## Codex CLI
-
-Use the `codex mcp add` command to register WoopSocial with Codex.
-
-```bash
-codex mcp add woopsocial --url "https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY"
 ```
 
 ## Claude Desktop
