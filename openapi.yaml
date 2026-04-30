@@ -25,6 +25,7 @@ paths:
   /posts:
     post:
       operationId: createPost
+      x-woopsocial-mcp-tool-name: posts.create
       tags:
         - Posts
       security:
@@ -64,6 +65,7 @@ paths:
   /posts/validate:
     post:
       operationId: validatePost
+      x-woopsocial-mcp-tool-name: posts.validate
       tags:
         - Posts
       security:
@@ -97,6 +99,7 @@ paths:
   /posts/{postId}:
     get:
       operationId: getPost
+      x-woopsocial-mcp-tool-name: posts.get
       tags:
         - Posts
       security:
@@ -127,6 +130,7 @@ paths:
                 $ref: "#/components/schemas/GetPostErrorResponse"
     delete:
       operationId: deletePost
+      x-woopsocial-mcp-tool-name: posts.delete
       tags:
         - Posts
       security:
@@ -163,6 +167,7 @@ paths:
   /social-account-posts:
     get:
       operationId: listSocialAccountPosts
+      x-woopsocial-mcp-tool-name: social_account_posts.list
       tags:
         - Posts
       security:
@@ -189,8 +194,35 @@ paths:
               schema:
                 $ref: "#/components/schemas/ListSocialAccountPostsResponse"
   /projects:
+    post:
+      operationId: createProject
+      x-woopsocial-mcp-tool-name: projects.create
+      tags:
+        - Projects
+      security:
+        - ApiKey: []
+      summary: Create project
+      description: |
+        Creates a project in the API key's organization.
+
+        Use projects to isolate social accounts, media, and posts for a
+        specific user, client, or brand in your application.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProjectRequest"
+      responses:
+        "201":
+          description: Project created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
     get:
       operationId: listProjects
+      x-woopsocial-mcp-tool-name: projects.list
       tags:
         - Projects
       security:
@@ -206,9 +238,27 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Project"
+  /projects/{projectId}:
+    delete:
+      operationId: deleteProject
+      x-woopsocial-mcp-tool-name: projects.delete
+      tags:
+        - Projects
+      security:
+        - ApiKey: []
+      summary: Delete project
+      description: |
+        Permanently deletes one project and its related data, including
+        connected social accounts, OAuth grants, media references, and posts.
+      parameters:
+        - $ref: "#/components/parameters/ProjectIdPath"
+      responses:
+        "204":
+          description: Project deleted.
   /social-accounts/authorization-url:
     post:
       operationId: createOAuthAuthorization
+      x-woopsocial-mcp-tool-name: oauth.create_authorization
       tags:
         - Social Accounts
       security:
@@ -232,6 +282,7 @@ paths:
   /social-accounts:
     get:
       operationId: listSocialAccounts
+      x-woopsocial-mcp-tool-name: social_accounts.list
       tags:
         - Social Accounts
       security:
@@ -255,6 +306,7 @@ paths:
   /social-accounts/{socialAccountId}/platform-inputs:
     get:
       operationId: getSocialAccountPlatformInputs
+      x-woopsocial-mcp-tool-name: social_accounts.get_platform_inputs
       tags:
         - Social Accounts
       security:
@@ -316,6 +368,7 @@ paths:
   /media/upload-sessions:
     post:
       operationId: createUploadSession
+      x-woopsocial-mcp-tool-name: media_uploads.create_session
       tags:
         - Media
       security:
@@ -348,6 +401,7 @@ paths:
   /media/upload-sessions/{uploadSessionId}:
     get:
       operationId: getUploadSession
+      x-woopsocial-mcp-tool-name: media_uploads.get_session
       tags:
         - Media
       security:
@@ -365,6 +419,7 @@ paths:
   /media/upload-sessions/{uploadSessionId}/complete:
     post:
       operationId: completeUploadSession
+      x-woopsocial-mcp-tool-name: media_uploads.complete_session
       x-woopsocial-mcp-description: Completes the upload session started by `createUploadSession`.
       tags:
         - Media
@@ -384,6 +439,7 @@ paths:
   /webhooks:
     post:
       operationId: createWebhookEndpoint
+      x-woopsocial-mcp-tool-name: webhooks.create_endpoint
       tags:
         - Webhooks
       security:
@@ -415,6 +471,7 @@ paths:
           description: Validation error (unknown event type, empty url, etc.).
     get:
       operationId: listWebhookEndpoints
+      x-woopsocial-mcp-tool-name: webhooks.list_endpoints
       tags:
         - Webhooks
       security:
@@ -433,6 +490,7 @@ paths:
   /webhooks/{webhookId}:
     delete:
       operationId: deleteWebhookEndpoint
+      x-woopsocial-mcp-tool-name: webhooks.delete_endpoint
       tags:
         - Webhooks
       security:
@@ -441,6 +499,7 @@ paths:
       parameters:
         - name: webhookId
           in: path
+          description: Webhook endpoint identifier.
           required: true
           schema:
             type: string
@@ -452,6 +511,7 @@ paths:
   /health:
     get:
       operationId: getHealth
+      x-woopsocial-mcp-tool-name: health.get
       tags:
         - Health
       security:
@@ -554,6 +614,13 @@ components:
       schema:
         type: string
       description: Project that will own the uploaded media.
+    ProjectIdPath:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Project identifier.
     SocialAccountId:
       name: socialAccountId
       in: path
@@ -597,6 +664,7 @@ components:
           description: The HTTPS URL to POST webhook events to.
         eventTypes:
           type: array
+          description: Webhook event types this endpoint should receive.
           items:
             $ref: "#/components/schemas/WebhookEventType"
           minItems: 1
@@ -669,6 +737,15 @@ components:
         name:
           type: string
           description: Human-readable project name.
+    CreateProjectRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Human-readable project name.
     SocialAccountStatus:
       type: string
       enum:
@@ -700,6 +777,10 @@ components:
           description: Project identifier.
         platform:
           $ref: "#/components/schemas/SocialPlatform"
+        redirectUrl:
+          type: string
+          format: uri
+          description: Optional URL to redirect the browser to after OAuth completes. The redirect does not include tokens or credentials.
     CreateOAuthAuthorizationResponse:
       type: object
       additionalProperties: false
@@ -959,6 +1040,7 @@ components:
       items:
         $ref: "#/components/schemas/PostContentItem"
     PostSchedule:
+      description: When the post should be published.
       oneOf:
         - $ref: "#/components/schemas/DraftPostSchedule"
         - $ref: "#/components/schemas/PublishNowPostSchedule"
@@ -1457,6 +1539,12 @@ components:
           type: string
         postType:
           $ref: "#/components/schemas/FacebookPostType"
+    LinkedInFields:
+      type: object
+      properties:
+        link:
+          type: string
+          description: URL to publish as a LinkedIn link preview card.
     TikTokFields:
       type: object
       required:
@@ -1567,11 +1655,13 @@ components:
       allOf:
         - $ref: "#/components/schemas/LinkedInPlatform"
         - $ref: "#/components/schemas/SocialAccountInputBase"
+        - $ref: "#/components/schemas/LinkedInFields"
     LinkedInPagesInput:
       title: LinkedIn Pages
       allOf:
         - $ref: "#/components/schemas/LinkedInPagesPlatform"
         - $ref: "#/components/schemas/SocialAccountInputBase"
+        - $ref: "#/components/schemas/LinkedInFields"
     SocialAccountPost:
       oneOf:
         - $ref: "#/components/schemas/PinterestPost"
@@ -1635,11 +1725,13 @@ components:
       allOf:
         - $ref: "#/components/schemas/LinkedInPlatform"
         - $ref: "#/components/schemas/SocialAccountPostBase"
+        - $ref: "#/components/schemas/LinkedInFields"
     LinkedInPagesPost:
       title: LinkedIn Pages
       allOf:
         - $ref: "#/components/schemas/LinkedInPagesPlatform"
         - $ref: "#/components/schemas/SocialAccountPostBase"
+        - $ref: "#/components/schemas/LinkedInFields"
     WoopTestPlatform:
       type: object
       required:
@@ -1711,6 +1803,7 @@ components:
       enum:
         - DESCRIPTION
         - MEDIA
+        - LINK
         - PINTEREST_BOARD
         - CONTENT
         - TITLE
