@@ -278,7 +278,7 @@ paths:
         3. Open the returned `url` in your user's browser.
         4. After OAuth completes, WoopSocial redirects the browser back to `redirectUrl`
            with result query parameters.
-        5. Use `projectId` and `socialAccountId` from the redirect, or call
+        5. Use `projectId` and `socialAccountIds` from the redirect, or call
            `GET /social-accounts?projectId=...`, to store or confirm the connected account
            in your application.
 
@@ -289,7 +289,7 @@ paths:
         - `status=success`
         - `projectId`: the project identifier from the request
         - `platform`: the connected social platform
-        - `socialAccountId`: the connected social account identifier, included only when exactly one social account was connected
+        - `socialAccountIds`: comma-separated connected social account identifiers. This may contain one or more IDs depending on the platform OAuth flow.
 
         On failure, WoopSocial appends these query parameters to `redirectUrl`:
         - `status=error`
