@@ -265,7 +265,43 @@ paths:
         - ApiKey: []
       summary: Generate OAuth URL
       description: |
-        Generates a browser authorization URL for connecting a new social account to a project. Open the returned `url` in a browser to complete the platform-specific OAuth flow.
+        Generates a browser authorization URL for connecting a new social account to a project.
+
+        This endpoint is useful for multi-user integrations where your application lets
+        your own users, clients, or brands connect their social accounts to WoopSocial
+        without giving them access to your WoopSocial account.
+
+        A common flow is:
+        1. Create or select a WoopSocial project for your user, client, or brand.
+        2. Call this endpoint from your backend with that `projectId`, the target `platform`,
+           and a `redirectUrl` in your application.
+        3. Open the returned `url` in your user's browser.
+        4. After OAuth completes, WoopSocial redirects the browser back to `redirectUrl`
+           with result query parameters.
+        5. Use `projectId` and `socialAccountId` from the redirect, or call
+           `GET /social-accounts?projectId=...`, to store or confirm the connected account
+           in your application.
+
+        When `redirectUrl` is provided, the browser is redirected back to that URL after
+        the OAuth callback is handled.
+
+        On success, WoopSocial appends these query parameters to `redirectUrl`:
+        - `status=success`
+        - `projectId`: the project identifier from the request
+        - `platform`: the connected social platform
+        - `socialAccountId`: the connected social account identifier, included only when exactly one social account was connected
+
+        On failure, WoopSocial appends these query parameters to `redirectUrl`:
+        - `status=error`
+        - `projectId`: the project identifier from the request
+        - `platform`: the requested social platform
+        - `error`: an OAuth callback error code
+
+        If the OAuth callback state is missing or expired, WoopSocial cannot safely
+        determine the original `redirectUrl`, so the callback returns an HTTP error
+        instead of redirecting.
+
+        The redirect never includes OAuth tokens or credentials.
       requestBody:
         required: true
         content:
@@ -780,7 +816,30 @@ components:
         redirectUrl:
           type: string
           format: uri
-          description: Optional URL to redirect the browser to after OAuth completes. The redirect does not include tokens or credentials.
+          example: "https://app.example.com/oauth/complete"
+          description: |
+            Optional URL in your application to return the browser to after OAuth completes.
+
+            Use this for multi-user integrations where your users connect their own social
+            accounts through your app. WoopSocial appends OAuth result query parameters to
+            this URL so your app can finish the connection flow.
+
+            The redirect does not include tokens or credentials.
+    OAuthCallbackErrorCode:
+      type: string
+      enum:
+        - access_denied
+        - provider_error
+        - missing_code
+        - oauth_client_unavailable
+        - token_exchange_failed
+        - no_tokens
+        - account_persistence_failed
+        - grant_persistence_failed
+        - connection_session_persistence_failed
+      description: |
+        Error code appended to `redirectUrl` as the `error` query parameter when
+        OAuth fails after WoopSocial has recovered the callback state.
     CreateOAuthAuthorizationResponse:
       type: object
       additionalProperties: false
