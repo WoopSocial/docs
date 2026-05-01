@@ -9,46 +9,46 @@ description: "Tool names exposed by the WoopSocial MCP server"
 
 | Tool | Description |
 | --- | --- |
-| <code>createPost</code> | Creates a post with one or more social-account targets. |
-| <code>validatePost</code> | Validates a post without creating one. |
-| <code>getPost</code> | Returns one post with its social account posts inline. |
-| <code>deletePost</code> | Deletes one scheduled post by post ID. |
-| <code>listSocialAccountPosts</code> | Returns standalone social account posts for the API key's organization. |
+| <code>posts_create</code> | Creates a post with one or more social-account targets. |
+| <code>posts_validate</code> | Validates a post without creating one. |
+| <code>posts_get</code> | Returns one post with its social account posts inline. |
+| <code>posts_delete</code> | Deletes one scheduled post by post ID. |
+| <code>social_account_posts_list</code> | Returns standalone social account posts for the API key's organization. |
 
 ## Projects
 
 | Tool | Description |
 | --- | --- |
-| <code>createProject</code> | Creates a project in the API key's organization. |
-| <code>listProjects</code> | Returns projects that belong to the same organization as the API key. A project corresponds to a "Business Profile" in the UI. |
-| <code>deleteProject</code> | Permanently deletes one project and its related data, including connected social accounts, OAuth grants, media references, and posts. |
+| <code>projects_create</code> | Creates a project in the API key's organization. |
+| <code>projects_list</code> | Returns projects that belong to the same organization as the API key. A project corresponds to a "Business Profile" in the UI. |
+| <code>projects_delete</code> | Permanently deletes one project and its related data, including connected social accounts, OAuth grants, media references, and posts. |
 
 ## Social Accounts
 
 | Tool | Description |
 | --- | --- |
-| <code>createOAuthAuthorization</code> | Generates a browser authorization URL for connecting a new social account to a project. |
-| <code>listSocialAccounts</code> | Returns social accounts that can currently be used for publishing. |
-| <code>getSocialAccountPlatformInputs</code> | Returns platform-specific input options for a connected social account. |
+| <code>oauth_create_authorization</code> | Generates a browser authorization URL for connecting a new social account to a project. |
+| <code>social_accounts_list</code> | Returns social accounts that can currently be used for publishing. |
+| <code>social_accounts_get_platform_inputs</code> | Returns platform-specific input options for a connected social account. |
 
 ## Media
 
 | Tool | Description |
 | --- | --- |
-| <code>createUploadSession</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts. |
-| <code>getUploadSession</code> | Get media upload session status |
-| <code>completeUploadSession</code> | Completes the upload session started by `createUploadSession`. |
+| <code>media_uploads_create_session</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts. |
+| <code>media_uploads_get_session</code> | Get media upload session status |
+| <code>media_uploads_complete_session</code> | Completes the upload session started by `createUploadSession`. |
 
 ## Webhooks
 
 | Tool | Description |
 | --- | --- |
-| <code>createWebhookEndpoint</code> | Registers a URL to receive webhook events for the specified event types. |
-| <code>listWebhookEndpoints</code> | Returns all registered webhook endpoints for the organization. The `signingSecret` field is omitted. |
-| <code>deleteWebhookEndpoint</code> | Delete webhook endpoint |
+| <code>webhooks_create_endpoint</code> | Registers a URL to receive webhook events for the specified event types. |
+| <code>webhooks_list_endpoints</code> | Returns all registered webhook endpoints for the organization. The `signingSecret` field is omitted. |
+| <code>webhooks_delete_endpoint</code> | Delete webhook endpoint |
 
 ## Health
 
 | Tool | Description |
 | --- | --- |
-| <code>getHealth</code> | Returns a minimal response proving the WoopSocial API is reachable. |
+| <code>health_get</code> | Returns a minimal response proving the WoopSocial API is reachable. |

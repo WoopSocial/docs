@@ -25,7 +25,7 @@ paths:
   /posts:
     post:
       operationId: createPost
-      x-woopsocial-mcp-tool-name: posts.create
+      x-woopsocial-mcp-tool-name: posts_create
       tags:
         - Posts
       security:
@@ -65,7 +65,7 @@ paths:
   /posts/validate:
     post:
       operationId: validatePost
-      x-woopsocial-mcp-tool-name: posts.validate
+      x-woopsocial-mcp-tool-name: posts_validate
       tags:
         - Posts
       security:
@@ -99,7 +99,7 @@ paths:
   /posts/{postId}:
     get:
       operationId: getPost
-      x-woopsocial-mcp-tool-name: posts.get
+      x-woopsocial-mcp-tool-name: posts_get
       tags:
         - Posts
       security:
@@ -130,7 +130,7 @@ paths:
                 $ref: "#/components/schemas/GetPostErrorResponse"
     delete:
       operationId: deletePost
-      x-woopsocial-mcp-tool-name: posts.delete
+      x-woopsocial-mcp-tool-name: posts_delete
       tags:
         - Posts
       security:
@@ -167,7 +167,7 @@ paths:
   /social-account-posts:
     get:
       operationId: listSocialAccountPosts
-      x-woopsocial-mcp-tool-name: social_account_posts.list
+      x-woopsocial-mcp-tool-name: social_account_posts_list
       tags:
         - Posts
       security:
@@ -196,7 +196,7 @@ paths:
   /projects:
     post:
       operationId: createProject
-      x-woopsocial-mcp-tool-name: projects.create
+      x-woopsocial-mcp-tool-name: projects_create
       tags:
         - Projects
       security:
@@ -222,7 +222,7 @@ paths:
                 $ref: "#/components/schemas/Project"
     get:
       operationId: listProjects
-      x-woopsocial-mcp-tool-name: projects.list
+      x-woopsocial-mcp-tool-name: projects_list
       tags:
         - Projects
       security:
@@ -241,7 +241,7 @@ paths:
   /projects/{projectId}:
     delete:
       operationId: deleteProject
-      x-woopsocial-mcp-tool-name: projects.delete
+      x-woopsocial-mcp-tool-name: projects_delete
       tags:
         - Projects
       security:
@@ -258,7 +258,7 @@ paths:
   /social-accounts/authorization-url:
     post:
       operationId: createOAuthAuthorization
-      x-woopsocial-mcp-tool-name: oauth.create_authorization
+      x-woopsocial-mcp-tool-name: oauth_create_authorization
       tags:
         - Social Accounts
       security:
@@ -318,7 +318,7 @@ paths:
   /social-accounts:
     get:
       operationId: listSocialAccounts
-      x-woopsocial-mcp-tool-name: social_accounts.list
+      x-woopsocial-mcp-tool-name: social_accounts_list
       tags:
         - Social Accounts
       security:
@@ -342,7 +342,7 @@ paths:
   /social-accounts/{socialAccountId}/platform-inputs:
     get:
       operationId: getSocialAccountPlatformInputs
-      x-woopsocial-mcp-tool-name: social_accounts.get_platform_inputs
+      x-woopsocial-mcp-tool-name: social_accounts_get_platform_inputs
       tags:
         - Social Accounts
       security:
@@ -404,7 +404,7 @@ paths:
   /media/upload-sessions:
     post:
       operationId: createUploadSession
-      x-woopsocial-mcp-tool-name: media_uploads.create_session
+      x-woopsocial-mcp-tool-name: media_uploads_create_session
       tags:
         - Media
       security:
@@ -437,7 +437,7 @@ paths:
   /media/upload-sessions/{uploadSessionId}:
     get:
       operationId: getUploadSession
-      x-woopsocial-mcp-tool-name: media_uploads.get_session
+      x-woopsocial-mcp-tool-name: media_uploads_get_session
       tags:
         - Media
       security:
@@ -455,7 +455,7 @@ paths:
   /media/upload-sessions/{uploadSessionId}/complete:
     post:
       operationId: completeUploadSession
-      x-woopsocial-mcp-tool-name: media_uploads.complete_session
+      x-woopsocial-mcp-tool-name: media_uploads_complete_session
       x-woopsocial-mcp-description: Completes the upload session started by `createUploadSession`.
       tags:
         - Media
@@ -475,7 +475,7 @@ paths:
   /webhooks:
     post:
       operationId: createWebhookEndpoint
-      x-woopsocial-mcp-tool-name: webhooks.create_endpoint
+      x-woopsocial-mcp-tool-name: webhooks_create_endpoint
       tags:
         - Webhooks
       security:
@@ -507,7 +507,7 @@ paths:
           description: Validation error (unknown event type, empty url, etc.).
     get:
       operationId: listWebhookEndpoints
-      x-woopsocial-mcp-tool-name: webhooks.list_endpoints
+      x-woopsocial-mcp-tool-name: webhooks_list_endpoints
       tags:
         - Webhooks
       security:
@@ -526,7 +526,7 @@ paths:
   /webhooks/{webhookId}:
     delete:
       operationId: deleteWebhookEndpoint
-      x-woopsocial-mcp-tool-name: webhooks.delete_endpoint
+      x-woopsocial-mcp-tool-name: webhooks_delete_endpoint
       tags:
         - Webhooks
       security:
@@ -547,7 +547,7 @@ paths:
   /health:
     get:
       operationId: getHealth
-      x-woopsocial-mcp-tool-name: health.get
+      x-woopsocial-mcp-tool-name: health_get
       tags:
         - Health
       security:
