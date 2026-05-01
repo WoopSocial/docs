@@ -7,27 +7,21 @@ description: "Connect AI assistants and autonomous agents to WoopSocial through 
 
 WoopSocial exposes a Model Context Protocol (MCP) server so AI assistants and autonomous agents can manage social content with structured tools instead of ad hoc HTTP calls.
 
-<Note>
-  Create your API key in [WoopSocial dashboard -> API](https://app.woopsocial.com/api-access). MCP uses the same API key and permissions as the REST API.
-</Note>
-
 ## Endpoint
 
 | Item | Value |
 | --- | --- |
-| **MCP URL** | `https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY` |
+| **MCP URL** | `https://api.woopsocial.com/mcp` |
 | **Transport** | Streamable HTTP |
 
-<Warning>
-  Treat API keys like production passwords. They can publish posts, delete content, and disconnect accounts when tools are invoked.
-</Warning>
+This endpoint implements OAuth, so your MCP client will ask you to log into your [WoopSocial account](https://app.woopsocial.com/login) to establish the connection.
 
 ## What the server does
 
 The WoopSocial MCP server mirrors the same core capabilities as our API:
 
-* **Projects** - discover the projects available to the authenticated key.
-* **Social Accounts** - list connected profiles and their platform-specific input options.
+* **Projects** - manage your organization's projects.
+* **Social Accounts** - list connected social accounts and their platform-specific options.
 * **Posts** - create, list, read, validate, and delete scheduled content.
 * **Media** - upload files and manage media attached to posts.
 * **Webhooks** - register delivery callbacks for post events.
@@ -38,6 +32,21 @@ The WoopSocial MCP server mirrors the same core capabilities as our API:
 * **Parity**: MCP tools use the same backend logic as `https://api.woopsocial.com/v1`.
 * **Choose MCP** when you want your AI agent to talk to WoopSocial.
 * **Choose API** for servers, webhooks, apps.
+
+## API key-based authentication fallback
+
+WoopSocial implements OAuth for authenticating clients, so the `https://api.woopsocial.com/mcp` endpoint should just work. However, if your MCP client can't connect to this URL, it's possible to authenticate using API keys as a fallback mechanism.
+
+Create your API key in [WoopSocial dashboard -> API](https://app.woopsocial.com/api-access). MCP uses the same API key and permissions as the REST API.
+
+| Item | Value |
+| --- | --- |
+| **MCP URL** | `https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY` |
+| **Transport** | Streamable HTTP |
+
+<Warning>
+  Treat API keys like production passwords. They can publish posts, delete content, and disconnect accounts when tools are invoked.
+</Warning>
 
 ## Next steps
 
