@@ -35,7 +35,7 @@ description: "Tool names exposed by the WoopSocial MCP server"
 
 | Tool | Description |
 | --- | --- |
-| <code>media_uploads_create_session</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts. |
+| <code>media_uploads_create_session</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts. The presigned URLs are hosted on Cloudflare. If your MCP client has restrictions on which domains it is allowed to send data to, you will need to add `*.cloudflarestorage.com` to your MCP client's approved domains. |
 | <code>media_uploads_get_session</code> | Get media upload session status |
 | <code>media_uploads_complete_session</code> | Completes the upload session started by `createUploadSession`. |
 
