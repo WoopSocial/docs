@@ -409,8 +409,8 @@ paths:
         This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner.
         Calling this creates an upload session and returns presigned URLs for uploading the file in parts.
         
-        The presigned URLs are hosted on Cloudflare. If your MCP client has restrictions on which domains it is allowed to send data to, you will need to add `*.cloudflarestorage.com` to your MCP client's approved domains.
-        On Claude Desktop, you can do this in Settings > Capabilities > Scroll Down > Domain Allowlist > enter '*.cloudflarestorage.com'.
+        The presigned URLs are hosted on Cloudflare. If your MCP client has restrictions on which domains it is allowed to send data to, you will need to add `r2.cloudflarestorage.com` to your MCP client's approved domains.
+        On Claude Desktop, you can do this in Settings > Capabilities > Scroll Down > Domain Allowlist > enter 'r2.cloudflarestorage.com'.
       tags:
         - Media
       security:
