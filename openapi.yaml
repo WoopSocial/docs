@@ -1588,6 +1588,10 @@ components:
           description: Identifier of the board to pin to.
         title:
           type: string
+        link:
+          type: string
+          maxLength: 2048
+          description: Destination URL to attach to the Pin.
     InstagramFields:
       type: object
       required:
