@@ -14,6 +14,7 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | <code>posts_get</code> | Returns one post with its social account posts inline. |
 | <code>posts_delete</code> | Deletes one scheduled post by post ID. |
 | <code>social_account_posts_list</code> | Returns standalone social account posts for the API key's organization. |
+| <code>social_account_posts_delete</code> | Deletes one social account post by ID. |
 
 ## Projects
 
@@ -35,6 +36,8 @@ description: "Tool names exposed by the WoopSocial MCP server"
 
 | Tool | Description |
 | --- | --- |
+| <code>media_list</code> | Returns media library items that belong to the API key's organization. |
+| <code>media_delete</code> | Deletes one media item by ID. |
 | <code>media_uploads_create_session</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts.  The presigned URLs are hosted on Cloudflare. If your MCP client has restrictions on which domains it is allowed to send data to, you will need to add `r2.cloudflarestorage.com` to your MCP client's approved domains. On Claude Desktop, you can do this in Settings > Capabilities > Scroll Down > Domain Allowlist > enter 'r2.cloudflarestorage.com'. |
 | <code>media_uploads_get_session</code> | Get media upload session status |
 | <code>media_uploads_complete_session</code> | Completes the upload session started by `createUploadSession`. |

@@ -193,6 +193,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ListSocialAccountPostsResponse"
+  /social-account-posts/{socialAccountPostId}:
+    delete:
+      operationId: deleteSocialAccountPost
+      x-woopsocial-mcp-tool-name: social_account_posts_delete
+      tags:
+        - Posts
+      security:
+        - ApiKey: []
+      summary: Delete social account post
+      description: |
+        Deletes one social account post by ID.
+      parameters:
+        - $ref: "#/components/parameters/SocialAccountPostId"
+      responses:
+        "204":
+          description: Social account post deleted.
+        "404":
+          description: Social account post not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteSocialAccountPostErrorResponse"
+        "500":
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteSocialAccountPostErrorResponse"
   /projects:
     post:
       operationId: createProject
@@ -363,6 +391,30 @@ paths:
               schema:
                 $ref: "#/components/schemas/SocialAccountPlatformInputs"
   /media:
+    get:
+      operationId: listMedia
+      x-woopsocial-mcp-tool-name: media_list
+      tags:
+        - Media
+      security:
+        - ApiKey: []
+      summary: List media
+      description: |
+        Returns media library items that belong to the API key's organization.
+
+        When `projectId` is provided, only media in that project is returned.
+      parameters:
+        - $ref: "#/components/parameters/ProjectIdFilter"
+        - $ref: "#/components/parameters/MediaIdsFilter"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+      responses:
+        "200":
+          description: Media items.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListMediaResponse"
     post:
       operationId: createMedia
       x-woopsocial-mcp-exclude: true
@@ -401,6 +453,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreateMediaResponse"
+  /media/{mediaId}:
+    delete:
+      operationId: deleteMedia
+      x-woopsocial-mcp-tool-name: media_delete
+      tags:
+        - Media
+      security:
+        - ApiKey: []
+      summary: Delete media
+      description: |
+        Deletes one media item by ID.
+      parameters:
+        - $ref: "#/components/parameters/MediaId"
+      responses:
+        "204":
+          description: Media deleted.
+        "404":
+          description: Media not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteMediaErrorResponse"
+        "500":
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteMediaErrorResponse"
   /media/upload-sessions:
     post:
       operationId: createUploadSession
@@ -609,6 +689,17 @@ components:
         items:
           type: string
       description: Filter to one or more parent posts. Provide a comma-separated list of post IDs.
+    MediaIdsFilter:
+      name: mediaId
+      in: query
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Filter to one or more media items. Provide a comma-separated list of media IDs.
     SocialPlatformFilter:
       name: platform
       in: query
@@ -670,6 +761,13 @@ components:
       schema:
         type: string
       description: Connected social account identifier.
+    SocialAccountPostId:
+      name: socialAccountPostId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Social account post identifier.
     PostId:
       name: postId
       in: path
@@ -684,6 +782,13 @@ components:
       schema:
         type: string
       description: Media upload session identifier.
+    MediaId:
+      name: mediaId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Media identifier.
   securitySchemes:
     ApiKey:
       type: http
@@ -1046,10 +1151,7 @@ components:
           type: string
           description: Media identifier from the media library.
         mediaType:
-          type: string
-          enum:
-            - IMAGE
-            - VIDEO
+          $ref: "#/components/schemas/MediaType"
         url:
           type: string
           format: uri
@@ -1166,6 +1268,13 @@ components:
           $ref: "#/components/schemas/PostContentInput"
         schedule:
           $ref: "#/components/schemas/PostSchedule"
+        autoDeleteMediaAfterPublish:
+          type: boolean
+          default: false
+          description: |
+            When true, all media referenced by this post is automatically
+            deleted from the media library after all social-account deliveries
+            for the post have published successfully.
         socialAccounts:
           type: array
           minItems: 1
@@ -1184,6 +1293,7 @@ components:
         - projectId
         - content
         - schedule
+        - autoDeleteMediaAfterPublish
         - socialAccountPosts
         - createdAt
         - updatedAt
@@ -1198,6 +1308,9 @@ components:
           $ref: "#/components/schemas/PostContent"
         schedule:
           $ref: "#/components/schemas/PostSchedule"
+        autoDeleteMediaAfterPublish:
+          type: boolean
+          description: Whether media auto-delete-after-publish is enabled for this post.
         socialAccountPosts:
           type: array
           minItems: 1
@@ -1222,6 +1335,50 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/SocialAccountPost"
+        nextCursor:
+          type: string
+          description: Opaque cursor for the next page of results. Omitted when there are no more results.
+    MediaType:
+      type: string
+      enum:
+        - IMAGE
+        - VIDEO
+    Media:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - projectId
+        - mediaType
+        - url
+        - createdAt
+      properties:
+        id:
+          type: string
+          description: Media identifier.
+        projectId:
+          type: string
+          description: Project identifier.
+        mediaType:
+          $ref: "#/components/schemas/MediaType"
+        url:
+          type: string
+          format: uri
+          description: Canonical media URL.
+        createdAt:
+          type: string
+          format: date-time
+          description: UTC time when the media item was created.
+    ListMediaResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - media
+      properties:
+        media:
+          type: array
+          items:
+            $ref: "#/components/schemas/Media"
         nextCursor:
           type: string
           description: Opaque cursor for the next page of results. Omitted when there are no more results.
@@ -1973,6 +2130,38 @@ components:
       properties:
         code:
           $ref: "#/components/schemas/DeletePostErrorCode"
+        message:
+          type: string
+    DeleteSocialAccountPostErrorCode:
+      type: string
+      enum:
+        - SOCIAL_ACCOUNT_POST_NOT_FOUND
+        - INTERNAL_ERROR
+    DeleteSocialAccountPostErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: "#/components/schemas/DeleteSocialAccountPostErrorCode"
+        message:
+          type: string
+    DeleteMediaErrorCode:
+      type: string
+      enum:
+        - MEDIA_NOT_FOUND
+        - INTERNAL_ERROR
+    DeleteMediaErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: "#/components/schemas/DeleteMediaErrorCode"
         message:
           type: string
     InstagramPostType:
