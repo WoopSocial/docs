@@ -32,11 +32,11 @@ paths:
         - ApiKey: []
       summary: Create post
       description: |
-        Creates a post with one or more social-account targets.
+        Creates a (parent) post with one or more social account (child) posts.
 
         All referenced social accounts must belong to the same project.
 
-        The request is validated atomically. If any social-account fails validation, the post is not created.
+        The request is validated atomically. If any social account fails validation, the post is not created.
       requestBody:
         required: true
         content:
@@ -75,7 +75,7 @@ paths:
         Validates a post without creating one.
 
         This endpoint applies the same validation rules as `POST /posts`,
-        including social-account resolution, platform-specific validation, and
+        including social account resolution, platform-specific validation, and
         media validation for referenced media library items.
       requestBody:
         required: true
@@ -139,7 +139,7 @@ paths:
       description: |
         Deletes one scheduled post by post ID.
 
-        A post can only be deleted when all of its social-account deliveries are
+        A post can only be deleted when all of its social account deliveries are
         still `NOT_STARTED`.
       parameters:
         - $ref: "#/components/parameters/PostId"
@@ -176,8 +176,7 @@ paths:
       description: |
         Returns standalone social account posts for the API key's organization.
 
-        Each item includes the materialized content and schedule for that
-        social-account target.
+        Each item includes the content, schedule and delivery status for a given social account target.
       parameters:
         - $ref: "#/components/parameters/ProjectIdsFilter"
         - $ref: "#/components/parameters/SocialAccountIdsFilter"
@@ -385,7 +384,7 @@ paths:
         - $ref: "#/components/parameters/SocialAccountId"
       responses:
         "200":
-          description: Social-account-specific platform input options.
+          description: Social account-specific platform input options.
           content:
             application/json:
               schema:
@@ -1028,7 +1027,7 @@ components:
             Available Pinterest boards for this account.
 
             Each `id` value can be sent as `pinterestBoardId` when creating a
-            post for a Pinterest social-account target.
+            post for a Pinterest social account target.
           items:
             $ref: "#/components/schemas/PinterestBoardOption"
     TikTokSocialAccountPlatformSpecificInputs:
@@ -1055,7 +1054,7 @@ components:
             Privacy values currently allowed for this TikTok account.
 
             Each value can be sent as `privacyLevel` when creating a post for a
-            TikTok social-account target.
+            TikTok social account target.
           items:
             $ref: "#/components/schemas/TikTokPrivacyLevel"
         commentAvailable:
@@ -1273,13 +1272,13 @@ components:
           default: false
           description: |
             When true, all media referenced by this post is automatically
-            deleted from the media library after all social-account deliveries
+            deleted from the media library after all social account deliveries
             for the post have published successfully.
         socialAccounts:
           type: array
           minItems: 1
           description: |
-            Social-account targets for this post.
+            Social account targets for this post.
 
             All referenced social accounts must belong to the same project.
             Duplicate `socialAccountId` values are invalid.
