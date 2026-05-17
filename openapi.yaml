@@ -312,13 +312,19 @@ paths:
         When `redirectUrl` is provided, the browser is redirected back to that URL after
         the OAuth callback is handled.
 
-        On success, WoopSocial appends these query parameters to `redirectUrl`:
+        For Facebook, WoopSocial shows a page-selection screen after authorization
+        because Facebook may return more pages than the user appeared to select in
+        the Facebook dialog in cases where the user has authorized with WoopSocial previously. The selected pages are connected to the single
+        `projectId` from this request, then WoopSocial redirects back to
+        `redirectUrl` when one was provided.
+
+        When `redirectUrl` is provided, WoopSocial appends these query parameters on success:
         - `status=success`
         - `projectId`: the project identifier from the request
         - `platform`: the connected social platform
         - `socialAccountIds`: comma-separated connected social account identifiers. This may contain one or more IDs depending on the platform OAuth flow.
 
-        On failure, WoopSocial appends these query parameters to `redirectUrl`:
+        When `redirectUrl` is provided, WoopSocial appends these query parameters on failure:
         - `status=error`
         - `projectId`: the project identifier from the request
         - `platform`: the requested social platform
@@ -974,6 +980,7 @@ components:
       additionalProperties: false
       required:
         - id
+        - externalAccountId
         - platform
         - username
         - imageUrl
@@ -982,6 +989,9 @@ components:
         id:
           type: string
           description: Social account identifier.
+        externalAccountId:
+          type: string
+          description: Platform-specific account, page, profile, or channel identifier.
         platform:
           $ref: "#/components/schemas/SocialPlatform"
           description: Social platform for the connected account.
