@@ -432,14 +432,14 @@ paths:
         Uploads a media file in a single request and creates a media item.
 
         The server determines the media MIME type from the uploaded file.
-        Upload the raw file bytes as the request body. Do NOT use `multipart/form-data`.
+        Send a `multipart/form-data` request with the file in the `file` field.
 
         Example:
 
         ```bash
         curl -X POST 'https://api.woopsocial.com/v1/media?projectId=YOUR_PROJECT_ID' \
           -H 'Authorization: Bearer YOUR_API_KEY' \
-          --data-binary '@/path/to/image.jpg'
+          -F 'file=@/path/to/image.jpg'
         ```
 
         Use this endpoint for straightforward uploads up to 100 MB.
@@ -451,15 +451,17 @@ paths:
       requestBody:
         required: true
         content:
-          "*/*":
+          multipart/form-data:
             schema:
-              type: string
-              format: binary
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
               description: |
                 Media file to upload. Maximum size is 100 MB.
-
-                The `Content-Type` header is ignored — the server determines the
-                actual media MIME type from the file contents.
       responses:
         "200":
           description: Media uploaded.
