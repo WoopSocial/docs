@@ -372,6 +372,38 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/SocialAccount"
+  /social-accounts/{socialAccountId}:
+    delete:
+      operationId: deleteSocialAccount
+      x-woopsocial-mcp-tool-name: social_accounts_delete
+      tags:
+        - Social Accounts
+      security:
+        - ApiKey: []
+      summary: Delete social account
+      description: |
+        Deletes one social account connection by ID.
+
+        This removes the associated OAuth grant, including stored access and
+        refresh tokens, so the account no longer counts toward the
+        organization's active connected-account allowance.
+      parameters:
+        - $ref: "#/components/parameters/SocialAccountId"
+      responses:
+        "204":
+          description: Social account connection deleted.
+        "404":
+          description: Social account not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteSocialAccountErrorResponse"
+        "500":
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteSocialAccountErrorResponse"
   /social-accounts/{socialAccountId}/platform-inputs:
     get:
       operationId: getSocialAccountPlatformInputs
@@ -2166,6 +2198,22 @@ components:
       properties:
         code:
           $ref: "#/components/schemas/DeleteSocialAccountPostErrorCode"
+        message:
+          type: string
+    DeleteSocialAccountErrorCode:
+      type: string
+      enum:
+        - SOCIAL_ACCOUNT_NOT_FOUND
+        - INTERNAL_ERROR
+    DeleteSocialAccountErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: "#/components/schemas/DeleteSocialAccountErrorCode"
         message:
           type: string
     DeleteMediaErrorCode:
