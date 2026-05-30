@@ -36,7 +36,8 @@
           {
             "group": "Overview",
             "pages": [
-              "api-reference/overview"
+              "api-reference/overview",
+              "api-reference/api-onboarding"
             ]
           }
         ]

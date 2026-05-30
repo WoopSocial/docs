@@ -1,0 +1,82 @@
+---
+title: "API Onboarding"
+---
+
+## Regular API Setup
+
+1. Copy your API key from the platform (need a new one? [<u>Get your API key here</u>](https://app.woopsocial.com/api-access))
+2. Connect one of your social media accounts to WoopSocial (Click Connect Accounts [<u>in the WoopSocial Dashboard menu</u>](https://app.woopsocial.com/) or [<u>create an OAuth URL</u>](https://docs.woopsocial.com/api-reference/social-accounts/generate-oauth-url))
+3. Run ‘[<u>Get Projects</u>](https://docs.woopsocial.com/api-reference/projects/list-projects)’ or copy your project ID from the top left Project dropdown in the platform
+
+```text
+const options = {method: 'GET', headers: {Authorization: 'Bearer <token>'}};
+fetch('https://api.woopsocial.com/v1/projects', options)
+  .then(res => res.json())
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
+```
+
+4. Run ‘[<u>Get social accounts</u>](https://docs.woopsocial.com/api-reference/social-accounts/list-social-accounts)’ or copy your social account ID from the ‘Connect Accounts’ pop-up
+
+```text
+const options = {method: 'GET', headers: {Authorization: 'Bearer <token>'}};
+fetch('https://api.woopsocial.com/v1/social-accounts', options)
+  .then(res => res.json())
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
+```
+
+5. Using your Project ID and your Social Account ID, create a test post for that account
+
+```text
+const options = {
+  method: 'POST',
+  headers: {Authorization: 'Bearer <token>', 'Content-Type': 'application/json'},
+  body: JSON.stringify({
+    content: [{text: '<string>', media: [{mediaId: '<string>'}]}],
+    schedule: {},
+    socialAccounts: [
+
+      {
+        socialAccountId: '<string>',
+        contentOverride: [{text: '<string>', media: [{mediaId: '<string>'}]}],
+        link: '<string>'
+      }
+    ],
+    autoDeleteMediaAfterPublish: false
+  })
+};
+fetch('https://api.woopsocial.com/v1/posts', options)
+  .then(res => res.json())
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
+```
+
+\
+Issues? Just use the chat button in the bottom right and we’ll help you out.
+
+## Zapier setup
+
+1. Create a new Zap → Search for “WoopSocial”
+2. Click “Account” and “Connect WoopSocial”/”Sign in”
+3. Enter your API key (go here to create a new one if needed) → Connect
+4. Select “Create a new social media post” → Continue
+5. Select your Business Profile and your Social Media Account(s)
+6. Choose a Selected Time or type “Now”
+7. Enter the Post Content and select a Media File if needed → Continue
+8. Click “Test Step”
+
+Issues? Just use the chat button in the bottom right and we’ll help you out.
+
+## n8n setup
+
+1. Create a new workflow → Search for “@woopsocial/n8n-nodes-woopsocial”
+2. Connect it by entering your API key
+3. Set up new modules to get your project ID (or go to the dashboard and go to the dropdown in the top left to copy it)
+4. Grab your social account ID (or copy it from the Connect Accounts modal in your dashboard)
+5. Set up a new “Create a social media post” module
+6. Enter your Project ID and Social Account ID(s)
+7. Enter your post content and add an optional media file
+8. Test it by publishing a new post
+
+Issues? Just use the chat button in the bottom right and we’ll help you out.
