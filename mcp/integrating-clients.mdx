@@ -1,5 +1,5 @@
 ---
-title: "Integrating MCP Clients"
+title: "Integrating MCP in AI Agents, Claude, ChatGPT"
 description: "Set up Claude Desktop, Claude Code, Cursor, ChatGPT, and other MCP clients with WoopSocial"
 ---
 
@@ -21,7 +21,7 @@ Use this page to connect the WoopSocial MCP server to your AI agent, Claude, Cha
 6. Name it ‘woopsocial’ and use [https://api.woopsocial.com/mcp](https://api.woopsocial.com/mcp) as the URL
 7. Click **Add** and **Authorize** on the next page
 8. **Start a new Chat** in Claude → Ask it to write a test post to your social account for tomorrow
-9. It will find your **Project ID** and **Social Account ID** and will schedule a test post for tomorrow 
+9. It will find your **Project ID** and **Social Account ID** and will schedule a test post for tomorrow
 10. If you want, you can delete the post straight away
 
 **Note:** You might need to add the media server (where your images and videos are stored) to your allowed domains by going to **Settings** → **Capabilities** → **Domain Allowlist** → **Add**`*.cloudflarestorage.com`(including the asterisk/star)
@@ -140,8 +140,7 @@ Issues? Just use the chat button in the bottom right and we’ll help you out.
 1. Grab your MCP link from your [API Key Page](https://app.woopsocial.com/api-access)
 2. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
 3. Run:\
-   `gemini mcp add woopsocial npx -y mcp-remote `
-   `https://api.woopsocial.com/mcp`
+   `gemini mcp add woopsocial npx -y mcp-remote ` `https://api.woopsocial.com/mcp`
 4. Or `edit ~/.gemini/settings.json manually` and add:\
    `{  "mcpServers": {    "woopsocial": {      "command": "npx",      "args": ["-y", "mcp-remote", "https://api.woopsocial.com/mcp"]    }  }}`
 5. Put the following prompt in Gemini: “Find my project ID and find my social account IDs with the Woopsocial tools. Then schedule a test post for tomorrow”
