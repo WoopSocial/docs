@@ -6,8 +6,12 @@ sidebarTitle: "API Onboarding"
 ## Regular API Setup
 
 1. Copy your API key from the platform (need a new one? [<u>Get your API key here</u>](https://app.woopsocial.com/api-access))
-2. Connect one of your social media accounts to WoopSocial (Click Connect Accounts [<u>in the WoopSocial Dashboard menu</u>](https://app.woopsocial.com/) or [<u>create an OAuth URL</u>](https://docs.woopsocial.com/api-reference/social-accounts/generate-oauth-url))
-3. Run ‘[<u>Get social accounts</u>](https://docs.woopsocial.com/api-reference/social-accounts/list-social-accounts)’ or copy your social account ID from the ‘Connect Accounts’ pop-up
+2. Connect one of your social media accounts to WoopSocial (click Connect Accounts [<u>in the WoopSocial Dashboard menu</u>](https://app.woopsocial.com/) or [<u>create an OAuth URL</u>](https://docs.woopsocial.com/api-reference/social-accounts/generate-oauth-url))
+3. Use the <a href="/api-reference/projects/list-projects?playground=open" target="_blank" rel="noopener noreferrer"><u>List projects playground</u></a> to determine your project's ID (you can also copy your project ID from the top left Project dropdown in the platform after you've finished onboarding).
+    1. Enter your API key from step 1 into the "Authorization" field
+    2. Click on the "Send" button. If the request is successful, it will list your projects' IDs and names. Copy one of the IDs, you will need it for the next step.
+4. Many social platforms require a photo or video to publish a post. You can do that via the <TODO: upload media> endpoint. Again, use the playground to construct the call that you need.
+5. Run ‘[<u>Get social accounts</u>](https://docs.woopsocial.com/api-reference/social-accounts/list-social-accounts)’ or copy your social account ID from the ‘Connect Accounts’ pop-up
 
 <CodeGroup>
 
@@ -36,7 +40,7 @@ print(response.json())
 
 </CodeGroup>
 
-4. Use the <a href="/api-reference/posts/create-post?playground=open" target="_blank" rel="noopener noreferrer"><u>Create post playground</u></a> to choose your platform and programming language in the top-right corner of the form. Fill in the remaining values on the left-hand side, then click the "Send" button to execute it.
+6. Use the <a href="/api-reference/posts/create-post?playground=open" target="_blank" rel="noopener noreferrer"><u>Create post playground</u></a> to choose your platform and programming language in the top-right corner of the form. Fill in the remaining values on the left-hand side, then click the "Send" button to execute it.
 
 Issues? Just use the chat button in the bottom right and we’ll help you out.
 
