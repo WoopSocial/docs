@@ -74,6 +74,116 @@ paths:
                     - platform: PINTEREST
                       socialAccountId: "<string>"
                       pinterestBoardId: "<string>"
+              linkedin:
+                summary: LinkedIn post
+                description: Create a LinkedIn post and publish it immediately.
+                value:
+                  content:
+                    - text: "<string>"
+                      media:
+                        - type: MEDIA_LIBRARY
+                          mediaId: "<string>"
+                  schedule:
+                    type: PUBLISH_NOW
+                  socialAccounts:
+                    - platform: LINKEDIN
+                      socialAccountId: "<string>"
+              linkedinPages:
+                summary: LinkedIn Page post
+                description: Create a LinkedIn Page post and publish it immediately.
+                value:
+                  content:
+                    - text: "<string>"
+                      media:
+                        - type: MEDIA_LIBRARY
+                          mediaId: "<string>"
+                  schedule:
+                    type: PUBLISH_NOW
+                  socialAccounts:
+                    - platform: LINKEDIN_PAGES
+                      socialAccountId: "<string>"
+              facebook:
+                summary: Facebook post
+                description: Create a Facebook image post and publish it immediately.
+                value:
+                  content:
+                    - text: "<string>"
+                      media:
+                        - type: MEDIA_LIBRARY
+                          mediaId: "<string>"
+                  schedule:
+                    type: PUBLISH_NOW
+                  socialAccounts:
+                    - platform: FACEBOOK
+                      socialAccountId: "<string>"
+                      postType: IMAGE
+              tiktok:
+                summary: TikTok post
+                description: Create a TikTok photo post and publish it immediately.
+                value:
+                  content:
+                    - text: "<string>"
+                      media:
+                        - type: MEDIA_LIBRARY
+                          mediaId: "<string>"
+                  schedule:
+                    type: PUBLISH_NOW
+                  socialAccounts:
+                    - platform: TIKTOK
+                      socialAccountId: "<string>"
+                      postType: PHOTO
+                      privacyLevel: PUBLIC_TO_EVERYONE
+                      allowComment: true
+                      allowDuet: false
+                      allowStitch: false
+                      isYourBrand: false
+                      isBrandedContent: false
+                      autoAddMusic: true
+              x:
+                summary: X post
+                description: Create an X post and publish it immediately.
+                value:
+                  content:
+                    - text: "<string>"
+                      media:
+                        - type: MEDIA_LIBRARY
+                          mediaId: "<string>"
+                  schedule:
+                    type: PUBLISH_NOW
+                  socialAccounts:
+                    - platform: X
+                      socialAccountId: "<string>"
+              youtube:
+                summary: YouTube post
+                description: Create a YouTube video post and publish it immediately.
+                value:
+                  content:
+                    - text: "<string>"
+                      media:
+                        - type: MEDIA_LIBRARY
+                          mediaId: "<string>"
+                  schedule:
+                    type: PUBLISH_NOW
+                  socialAccounts:
+                    - platform: YOUTUBE
+                      socialAccountId: "<string>"
+                      title: "<string>"
+                      privacy: public
+              wooptest:
+                summary: WoopTest post
+                description: Create a sandbox WoopTest post and publish it immediately.
+                value:
+                  content:
+                    - text: "<string>"
+                      media:
+                        - type: MEDIA_LIBRARY
+                          mediaId: "<string>"
+                  schedule:
+                    type: PUBLISH_NOW
+                  socialAccounts:
+                    - platform: WOOPTEST
+                      socialAccountId: "<string>"
+                      shouldSucceed: true
       responses:
         "201":
           description: Post created.
