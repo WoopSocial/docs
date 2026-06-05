@@ -11,10 +11,10 @@ sidebarTitle: "API Onboarding"
     1. Enter your API key from step 1 into the "Authorization" field
     2. Click on the "Send" button. If the request is successful, it will list your projects' IDs and names. Copy one of the IDs, you will need it for the next step.
 4. Many social platforms require a photo or video to publish a post. Use the <a href="/api-reference/media/upload-media?playground=open" target="_blank" rel="noopener noreferrer"><u>Upload media playground</u></a> to upload your file.
-    1. Enter the project id from the previous step in the `projectId` field
+    1. Enter the project id from the previous step in the `projectId` field.
     2. Select a file in the `Body` section of the form.
     3. Click "Send" and copy the returned media ID, which you will need when submitting a post.
-5. Run ‘[<u>Get social accounts</u>](https://docs.woopsocial.com/api-reference/social-accounts/list-social-accounts)’ or copy your social account ID from the "Connect Accounts" pop-up in the platform.
+5. Run ‘[<u>Get social accounts</u>](https://docs.woopsocial.com/api-reference/social-accounts/list-social-accounts)’ or copy your social account ID from the "Connect Accounts" pop-up in the platform. You will need this social account ID to schedule a post.
 6. Use the <a href="/api-reference/posts/create-post?playground=open" target="_blank" rel="noopener noreferrer"><u>Create post playground</u></a> to schedule a post.
     1. Choose your targeted social platform and programming language in the top-right corner of the playground form.
     2. Fill in the required values on the left-hand side including the `mediaId` acquired previously (unless you are submitting a text-only post).
