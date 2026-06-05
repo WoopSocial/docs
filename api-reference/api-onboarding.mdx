@@ -7,44 +7,32 @@ sidebarTitle: "API Onboarding"
 
 1. Copy your API key from the platform (need a new one? [<u>Get your API key here</u>](https://app.woopsocial.com/api-access))
 2. Connect one of your social media accounts to WoopSocial (Click Connect Accounts [<u>in the WoopSocial Dashboard menu</u>](https://app.woopsocial.com/) or [<u>create an OAuth URL</u>](https://docs.woopsocial.com/api-reference/social-accounts/generate-oauth-url))
-3. Run ‘[<u>Get Projects</u>](https://docs.woopsocial.com/api-reference/projects/list-projects)’ or copy your project ID from the top left Project dropdown in the platform
+3. Run ‘[<u>Get social accounts</u>](https://docs.woopsocial.com/api-reference/social-accounts/list-social-accounts)’ or copy your social account ID from the ‘Connect Accounts’ pop-up
 
-```text
-const options = {method: 'GET', headers: {Authorization: 'Bearer <token>'}};
-fetch('https://api.woopsocial.com/v1/projects', options)
-  .then(res => res.json())
-  .then(res => console.log(res))
-  .catch(err => console.error(err));
-```
-
-4. Run ‘[<u>Get social accounts</u>](https://docs.woopsocial.com/api-reference/social-accounts/list-social-accounts)’ or copy your social account ID from the ‘Connect Accounts’ pop-up
-
-```text
-const options = {method: 'GET', headers: {Authorization: 'Bearer <token>'}};
+```javascript
+const options = {method: 'GET', headers: {Authorization: 'Bearer <YOUR API KEY>'}};
 fetch('https://api.woopsocial.com/v1/social-accounts', options)
   .then(res => res.json())
   .then(res => console.log(res))
   .catch(err => console.error(err));
 ```
 
-5. Using your Project ID and your Social Account ID, create a test post for that account
+4. Using your Social Account ID, schedule a post for that account
 
-```text
+```javascript
 const options = {
   method: 'POST',
-  headers: {Authorization: 'Bearer <token>', 'Content-Type': 'application/json'},
+  headers: { Authorization: 'Bearer <YOUR API KEY>', 'Content-Type': 'application/json'},
   body: JSON.stringify({
-    content: [{text: '<string>', media: [{mediaId: '<string>'}]}],
-    schedule: {},
+    content: [{ text: '<string>', media: [{ type: 'MEDIA_LIBRARY', mediaId: '<string>' }]}],
+    schedule: { type: 'PUBLISH_NOW' },
     socialAccounts: [
-
       {
+        platform: 'INSTAGRAM',
         socialAccountId: '<string>',
-        contentOverride: [{text: '<string>', media: [{mediaId: '<string>'}]}],
-        link: '<string>'
+        postType: 'POST'
       }
-    ],
-    autoDeleteMediaAfterPublish: false
+    ]
   })
 };
 fetch('https://api.woopsocial.com/v1/posts', options)
