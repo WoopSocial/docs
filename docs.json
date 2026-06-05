@@ -10,6 +10,11 @@
       "perplexity"
     ]
   },
+  "api": {
+    "examples": {
+      "prefill": true
+    }
+  },
   "colors": {
     "primary": "#F18B20",
     "light": "#F9B96A",

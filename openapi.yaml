@@ -43,6 +43,37 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/CreatePostRequest"
+            examples:
+              instagram:
+                summary: Instagram post
+                description: Create an Instagram feed post and publish it immediately.
+                value:
+                  content:
+                    - text: "<string>"
+                      media:
+                        - type: MEDIA_LIBRARY
+                          mediaId: "<string>"
+                  schedule:
+                    type: PUBLISH_NOW
+                  socialAccounts:
+                    - platform: INSTAGRAM
+                      socialAccountId: "<string>"
+                      postType: POST
+              pinterest:
+                summary: Pinterest pin
+                description: Create a Pinterest pin and publish it immediately.
+                value:
+                  content:
+                    - text: "<string>"
+                      media:
+                        - type: MEDIA_LIBRARY
+                          mediaId: "<string>"
+                  schedule:
+                    type: PUBLISH_NOW
+                  socialAccounts:
+                    - platform: PINTEREST
+                      socialAccountId: "<string>"
+                      pinterestBoardId: "<string>"
       responses:
         "201":
           description: Post created.
