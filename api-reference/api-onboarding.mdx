@@ -7,40 +7,18 @@ sidebarTitle: "API Onboarding"
 
 1. Copy your API key from the platform (need a new one? [<u>Get your API key here</u>](https://app.woopsocial.com/api-access))
 2. Connect one of your social media accounts to WoopSocial (click Connect Accounts [<u>in the WoopSocial Dashboard menu</u>](https://app.woopsocial.com/) or [<u>create an OAuth URL</u>](https://docs.woopsocial.com/api-reference/social-accounts/generate-oauth-url))
-3. Use the <a href="/api-reference/projects/list-projects?playground=open" target="_blank" rel="noopener noreferrer"><u>List projects playground</u></a> to determine your project's ID (you can also copy your project ID from the top left Project dropdown in the platform after you've finished onboarding).
+3. Use the <a href="/api-reference/projects/list-projects?playground=open" target="_blank" rel="noopener noreferrer"><u>List projects playground</u></a> to determine your project's ID (you can also copy your project ID from the top-left Project dropdown in the platform after you've finished onboarding).
     1. Enter your API key from step 1 into the "Authorization" field
     2. Click on the "Send" button. If the request is successful, it will list your projects' IDs and names. Copy one of the IDs, you will need it for the next step.
-4. Many social platforms require a photo or video to publish a post. Use the <a href="/api-reference/media/upload-media?playground=open" target="_blank" rel="noopener noreferrer"><u>Upload media playground</u></a> to upload your file and copy the returned media ID. Again, use the playground to construct the call that you need.
-5. Run ‘[<u>Get social accounts</u>](https://docs.woopsocial.com/api-reference/social-accounts/list-social-accounts)’ or copy your social account ID from the ‘Connect Accounts’ pop-up
-
-<CodeGroup>
-
-```javascript JavaScript
-const options = {method: 'GET', headers: {Authorization: 'Bearer <YOUR API KEY>'}};
-fetch('https://api.woopsocial.com/v1/social-accounts', options)
-  .then(res => res.json())
-  .then(res => console.log(res))
-  .catch(err => console.error(err));
-```
-
-```bash cURL
-curl -X GET 'https://api.woopsocial.com/v1/social-accounts' \
-  -H 'Authorization: Bearer <YOUR API KEY>'
-```
-
-```python Python
-import requests
-
-headers = {"Authorization": "Bearer <YOUR API KEY>"}
-
-response = requests.get("https://api.woopsocial.com/v1/social-accounts", headers=headers)
-response.raise_for_status()
-print(response.json())
-```
-
-</CodeGroup>
-
-6. Use the <a href="/api-reference/posts/create-post?playground=open" target="_blank" rel="noopener noreferrer"><u>Create post playground</u></a> to choose your platform and programming language in the top-right corner of the form. Fill in the remaining values on the left-hand side, then click the "Send" button to execute it.
+4. Many social platforms require a photo or video to publish a post. Use the <a href="/api-reference/media/upload-media?playground=open" target="_blank" rel="noopener noreferrer"><u>Upload media playground</u></a> to upload your file.
+    1. Enter the project id from the previous step in the `projectId` field
+    2. Select a file in the `Body` section of the form.
+    3. Click "Send" and copy the returned media ID, which you will need when submitting a post.
+5. Run ‘[<u>Get social accounts</u>](https://docs.woopsocial.com/api-reference/social-accounts/list-social-accounts)’ or copy your social account ID from the "Connect Accounts" pop-up in the platform.
+6. Use the <a href="/api-reference/posts/create-post?playground=open" target="_blank" rel="noopener noreferrer"><u>Create post playground</u></a> to schedule a post.
+    1. Choose your targeted social platform and programming language in the top-right corner of the playground form.
+    2. Fill in the required values on the left-hand side including the `mediaId` acquired previously (unless you are submitting a text-only post).
+    3. Click the "Send" button to schedule the post.
 
 Issues? Just use the chat button in the bottom right and we’ll help you out.
 
