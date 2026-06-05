@@ -9,7 +9,9 @@ sidebarTitle: "API Onboarding"
 2. Connect one of your social media accounts to WoopSocial (Click Connect Accounts [<u>in the WoopSocial Dashboard menu</u>](https://app.woopsocial.com/) or [<u>create an OAuth URL</u>](https://docs.woopsocial.com/api-reference/social-accounts/generate-oauth-url))
 3. Run ‘[<u>Get social accounts</u>](https://docs.woopsocial.com/api-reference/social-accounts/list-social-accounts)’ or copy your social account ID from the ‘Connect Accounts’ pop-up
 
-```javascript
+<CodeGroup>
+
+```javascript JavaScript
 const options = {method: 'GET', headers: {Authorization: 'Bearer <YOUR API KEY>'}};
 fetch('https://api.woopsocial.com/v1/social-accounts', options)
   .then(res => res.json())
@@ -17,9 +19,28 @@ fetch('https://api.woopsocial.com/v1/social-accounts', options)
   .catch(err => console.error(err));
 ```
 
+```bash cURL
+curl -X GET 'https://api.woopsocial.com/v1/social-accounts' \
+  -H 'Authorization: Bearer <YOUR API KEY>'
+```
+
+```python Python
+import requests
+
+headers = {"Authorization": "Bearer <YOUR API KEY>"}
+
+response = requests.get("https://api.woopsocial.com/v1/social-accounts", headers=headers)
+response.raise_for_status()
+print(response.json())
+```
+
+</CodeGroup>
+
 4. Using your Social Account ID, schedule a post for that account
 
-```javascript
+<CodeGroup>
+
+```javascript JavaScript
 const options = {
   method: 'POST',
   headers: { Authorization: 'Bearer <YOUR API KEY>', 'Content-Type': 'application/json'},
@@ -40,6 +61,71 @@ fetch('https://api.woopsocial.com/v1/posts', options)
   .then(res => console.log(res))
   .catch(err => console.error(err));
 ```
+
+```bash cURL
+curl -X POST 'https://api.woopsocial.com/v1/posts' \
+  -H 'Authorization: Bearer <YOUR API KEY>' \
+  -H 'Content-Type: application/json' \
+  --data '{
+    "content": [
+      {
+        "text": "<string>",
+        "media": [
+          {
+            "type": "MEDIA_LIBRARY",
+            "mediaId": "<string>"
+          }
+        ]
+      }
+    ],
+    "schedule": {
+      "type": "PUBLISH_NOW"
+    },
+    "socialAccounts": [
+      {
+        "platform": "INSTAGRAM",
+        "socialAccountId": "<string>",
+        "postType": "POST"
+      }
+    ]
+  }'
+```
+
+```python Python
+import requests
+
+headers = {
+    "Authorization": "Bearer <YOUR API KEY>",
+    "Content-Type": "application/json",
+}
+payload = {
+    "content": [
+        {
+            "text": "<string>",
+            "media": [
+                {
+                    "type": "MEDIA_LIBRARY",
+                    "mediaId": "<string>",
+                }
+            ],
+        }
+    ],
+    "schedule": {"type": "PUBLISH_NOW"},
+    "socialAccounts": [
+        {
+            "platform": "INSTAGRAM",
+            "socialAccountId": "<string>",
+            "postType": "POST",
+        }
+    ],
+}
+
+response = requests.post("https://api.woopsocial.com/v1/posts", headers=headers, json=payload)
+response.raise_for_status()
+print(response.json())
+```
+
+</CodeGroup>
 
 \
 Issues? Just use the chat button in the bottom right and we’ll help you out.
