@@ -132,6 +132,7 @@ paths:
                     - platform: TIKTOK
                       socialAccountId: "<string>"
                       postType: PHOTO
+                      postMode: DIRECT_POST
                       privacyLevel: PUBLIC_TO_EVERYONE
                       allowComment: true
                       allowDuet: false
@@ -1978,6 +1979,20 @@ components:
       properties:
         postType:
           $ref: "#/components/schemas/TikTokPostType"
+        postMode:
+          $ref: "#/components/schemas/TikTokPostMode"
+          default: DIRECT_POST
+          description: |
+            TikTok posting mode.
+
+            Defaults to `DIRECT_POST` when omitted.
+
+            `DIRECT_POST` publishes directly to TikTok.
+
+            `MEDIA_UPLOAD` uploads the media to TikTok so the creator can
+            finish and publish it in TikTok.
+
+            Fields not used by the selected mode may be ignored by TikTok.
         privacyLevel:
           $ref: "#/components/schemas/TikTokPrivacyLevel"
         allowComment:
@@ -2398,6 +2413,11 @@ components:
       enum:
         - VIDEO
         - PHOTO
+    TikTokPostMode:
+      type: string
+      enum:
+        - DIRECT_POST
+        - MEDIA_UPLOAD
     YouTubePrivacy:
       type: string
       enum:
