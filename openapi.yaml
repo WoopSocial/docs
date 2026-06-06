@@ -1990,7 +1990,7 @@ components:
             `DIRECT_POST` publishes directly to TikTok.
 
             `MEDIA_UPLOAD` uploads the media to TikTok so the creator can
-            finish and publish it in TikTok.
+            finish and publish it in TikTok. Users will receive an inbox notification.
 
             Fields not used by the selected mode may be ignored by TikTok.
         privacyLevel:
