@@ -15,6 +15,11 @@
       "prefill": true
     }
   },
+  "seo": {
+    "metatags": {
+      "canonical": "https://docs.woopsocial.com"
+    }
+  },
   "colors": {
     "primary": "#F18B20",
     "light": "#F9B96A",
