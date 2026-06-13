@@ -1950,6 +1950,12 @@ components:
       properties:
         postType:
           $ref: "#/components/schemas/InstagramPostType"
+        coverMediaId:
+          type: string
+          description: |
+            Optional media library image identifier to use as the cover image for an Instagram Reel.
+
+            This field applies only to `postType=REEL`.
     FacebookFields:
       type: object
       required:
