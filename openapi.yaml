@@ -8,6 +8,8 @@ info:
 servers:
   - url: https://api.woopsocial.com/v1
     description: WoopSocial API URL.
+  - url: http://localhost:9123/api/external/v1
+    description: Local WoopSocial API URL.
 tags:
   - name: Posts
     description: Post scheduling endpoints.
@@ -1985,6 +1987,12 @@ components:
       properties:
         postType:
           $ref: "#/components/schemas/TikTokPostType"
+        videoCoverMediaId:
+          type: string
+          description: |
+            Optional media library image ID to use as a custom cover for
+            `postType=VIDEO`. WoopSocial stitches the image as a single frame
+            at the beginning of the video before sending it to TikTok.
         postMode:
           $ref: "#/components/schemas/TikTokPostMode"
           default: DIRECT_POST
