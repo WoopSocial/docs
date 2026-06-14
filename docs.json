@@ -12,6 +12,9 @@
     ]
   },
   "api": {
+    "playground": {
+      "proxy": false
+    },
     "examples": {
       "prefill": true
     }
