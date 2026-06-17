@@ -1952,10 +1952,10 @@ components:
       properties:
         postType:
           $ref: "#/components/schemas/InstagramPostType"
-        coverMediaId:
-          type: string
+        cover:
+          $ref: "#/components/schemas/PostContentMediaInput"
           description: |
-            Optional media library image identifier to use as the cover image for an Instagram Reel.
+            Optional image media reference to use as the cover image for an Instagram Reel.
 
             This field applies only to `postType=REEL`.
     FacebookFields:
@@ -1987,12 +1987,12 @@ components:
       properties:
         postType:
           $ref: "#/components/schemas/TikTokPostType"
-        videoCoverMediaId:
-          type: string
+        cover:
+          $ref: "#/components/schemas/PostContentMediaInput"
           description: |
-            Optional media library image ID to use as a custom cover for
-            `postType=VIDEO`. WoopSocial stitches the image as a single frame
-            at the beginning of the video before sending it to TikTok.
+            Optional image media reference to use as a custom cover for
+            `postType=VIDEO`. WoopSocial stitches the image as a single
+            frame at the beginning of the video before sending it to TikTok.
         postMode:
           $ref: "#/components/schemas/TikTokPostMode"
           default: DIRECT_POST
