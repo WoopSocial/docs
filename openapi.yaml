@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   summary: API for WoopSocial integrations.
   description: |
-    This is the public-facing OpenAPI contract for WoopSocial. It supports scheduling posts for various social media platforms such as Facebook, Instagram, LinkedIn, LinkedIn Pages, Pinterest, TikTok, X (formerly Twitter) and YouTube.
+    This is the public-facing OpenAPI contract for WoopSocial. It supports scheduling posts for various social media platforms such as Facebook, Instagram, LinkedIn, LinkedIn Pages, Pinterest, Threads, TikTok, X (formerly Twitter) and YouTube.
 servers:
   - url: https://api.woopsocial.com/v1
     description: WoopSocial API URL.
@@ -119,6 +119,20 @@ paths:
                     - platform: PINTEREST
                       socialAccountId: "<string>"
                       pinterestBoardId: "<string>"
+              Threads:
+                summary: Threads post
+                description: Create a Threads post and publish it immediately.
+                value:
+                  content:
+                    - text: "<string>"
+                      media:
+                        - type: MEDIA_LIBRARY
+                          mediaId: "<string>"
+                  schedule:
+                    type: PUBLISH_NOW
+                  socialAccounts:
+                    - platform: THREADS
+                      socialAccountId: "<string>"
               Tiktok:
                 summary: TikTok post
                 description: Create a TikTok photo post and publish it immediately.
@@ -1098,6 +1112,7 @@ components:
         - LINKEDIN_PAGES
         - INSTAGRAM
         - FACEBOOK
+        - THREADS
         - TIKTOK
         - X
         - YOUTUBE
@@ -1764,6 +1779,7 @@ components:
         - $ref: "#/components/schemas/LinkedInInput"
         - $ref: "#/components/schemas/LinkedInPagesInput"
         - $ref: "#/components/schemas/PinterestInput"
+        - $ref: "#/components/schemas/ThreadsInput"
         - $ref: "#/components/schemas/TikTokInput"
         - $ref: "#/components/schemas/WoopTestInput"
         - $ref: "#/components/schemas/XInput"
@@ -1774,6 +1790,7 @@ components:
           PINTEREST: "#/components/schemas/PinterestInput"
           INSTAGRAM: "#/components/schemas/InstagramInput"
           FACEBOOK: "#/components/schemas/FacebookInput"
+          THREADS: "#/components/schemas/ThreadsInput"
           TIKTOK: "#/components/schemas/TikTokInput"
           YOUTUBE: "#/components/schemas/YouTubeInput"
           X: "#/components/schemas/XInput"
@@ -1887,6 +1904,17 @@ components:
             - type: string
               enum:
                 - TIKTOK
+    ThreadsPlatform:
+      type: object
+      required:
+        - platform
+      properties:
+        platform:
+          allOf:
+            - $ref: "#/components/schemas/SocialPlatform"
+            - type: string
+              enum:
+                - THREADS
     YouTubePlatform:
       type: object
       required:
@@ -1965,6 +1993,9 @@ components:
       properties:
         link:
           type: string
+        locationId:
+          type: string
+          description: Facebook place ID to attach to the post.
         postType:
           $ref: "#/components/schemas/FacebookPostType"
     LinkedInFields:
@@ -2087,6 +2118,11 @@ components:
         - $ref: "#/components/schemas/TikTokPlatform"
         - $ref: "#/components/schemas/SocialAccountInputBase"
         - $ref: "#/components/schemas/TikTokFields"
+    ThreadsInput:
+      title: Threads
+      allOf:
+        - $ref: "#/components/schemas/ThreadsPlatform"
+        - $ref: "#/components/schemas/SocialAccountInputBase"
     YouTubeInput:
       title: YouTube
       allOf:
@@ -2115,6 +2151,7 @@ components:
         - $ref: "#/components/schemas/PinterestPost"
         - $ref: "#/components/schemas/InstagramPost"
         - $ref: "#/components/schemas/FacebookPost"
+        - $ref: "#/components/schemas/ThreadsPost"
         - $ref: "#/components/schemas/TikTokPost"
         - $ref: "#/components/schemas/YouTubePost"
         - $ref: "#/components/schemas/XPost"
@@ -2127,6 +2164,7 @@ components:
           PINTEREST: "#/components/schemas/PinterestPost"
           INSTAGRAM: "#/components/schemas/InstagramPost"
           FACEBOOK: "#/components/schemas/FacebookPost"
+          THREADS: "#/components/schemas/ThreadsPost"
           TIKTOK: "#/components/schemas/TikTokPost"
           YOUTUBE: "#/components/schemas/YouTubePost"
           X: "#/components/schemas/XPost"
@@ -2157,6 +2195,11 @@ components:
         - $ref: "#/components/schemas/TikTokPlatform"
         - $ref: "#/components/schemas/SocialAccountPostBase"
         - $ref: "#/components/schemas/TikTokFields"
+    ThreadsPost:
+      title: Threads
+      allOf:
+        - $ref: "#/components/schemas/ThreadsPlatform"
+        - $ref: "#/components/schemas/SocialAccountPostBase"
     YouTubePost:
       title: YouTube
       allOf:
