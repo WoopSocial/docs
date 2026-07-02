@@ -2067,6 +2067,11 @@ components:
         isBrandedContent:
           type: boolean
           description: Whether the post should be disclosed as branded content on TikTok.
+        isAigc:
+          type: boolean
+          default: false
+          description: |
+            Whether the TikTok post contains AI-generated content. This field applies to video posts.
         autoAddMusic:
           type: boolean
           description: |
