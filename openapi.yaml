@@ -2067,7 +2067,7 @@ components:
         isBrandedContent:
           type: boolean
           description: Whether the post should be disclosed as branded content on TikTok.
-        isAigc:
+        isAiGeneratedContent:
           type: boolean
           default: false
           description: |
