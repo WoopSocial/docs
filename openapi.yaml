@@ -28,6 +28,7 @@ paths:
     post:
       operationId: createPost
       x-woopsocial-mcp-tool-name: posts_create
+      x-woopsocial-mcp-simple-alias: posts_create_simple
       tags:
         - Posts
       security:
@@ -214,6 +215,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreatePostErrorResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
         "500":
           description: Internal server error.
           content:
@@ -224,6 +227,7 @@ paths:
     post:
       operationId: validatePost
       x-woopsocial-mcp-tool-name: posts_validate
+      x-woopsocial-mcp-simple-alias: posts_validate_simple
       tags:
         - Posts
       security:
@@ -248,6 +252,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ValidatePostResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
         "500":
           description: Internal server error.
           content:
@@ -280,6 +286,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GetPostErrorResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
         "500":
           description: Internal server error.
           content:
@@ -316,6 +324,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeletePostErrorResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
         "500":
           description: Internal server error.
           content:
@@ -350,6 +360,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ListSocialAccountPostsResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /social-account-posts/{socialAccountPostId}:
     delete:
       operationId: deleteSocialAccountPost
@@ -372,6 +384,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeleteSocialAccountPostErrorResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
         "500":
           description: Internal server error.
           content:
@@ -405,6 +419,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Project"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
     get:
       operationId: listProjects
       x-woopsocial-mcp-tool-name: projects_list
@@ -423,6 +439,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Project"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /projects/{projectId}:
     delete:
       operationId: deleteProject
@@ -440,6 +458,8 @@ paths:
       responses:
         "204":
           description: Project deleted.
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /social-accounts/authorization-url:
     post:
       operationId: createOAuthAuthorization
@@ -506,6 +526,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreateOAuthAuthorizationResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /social-accounts:
     get:
       operationId: listSocialAccounts
@@ -530,6 +552,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/SocialAccount"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /social-accounts/{socialAccountId}:
     delete:
       operationId: deleteSocialAccount
@@ -556,6 +580,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeleteSocialAccountErrorResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
         "500":
           description: Internal server error.
           content:
@@ -585,6 +611,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SocialAccountPlatformInputs"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /media:
     get:
       operationId: listMedia
@@ -610,6 +638,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ListMediaResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
     post:
       operationId: createMedia
       x-woopsocial-mcp-exclude: true
@@ -659,6 +689,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreateMediaResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /media/{mediaId}:
     delete:
       operationId: deleteMedia
@@ -681,6 +713,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeleteMediaErrorResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
         "500":
           description: Internal server error.
           content:
@@ -726,6 +760,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UploadSession"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /media/upload-sessions/{uploadSessionId}:
     get:
       operationId: getUploadSession
@@ -744,6 +780,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UploadSessionStatus"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /media/upload-sessions/{uploadSessionId}/complete:
     post:
       operationId: completeUploadSession
@@ -764,6 +802,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UploadSessionStatus"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /webhooks:
     post:
       operationId: createWebhookEndpoint
@@ -797,6 +837,8 @@ paths:
                 $ref: "#/components/schemas/WebhookEndpoint"
         "422":
           description: Validation error (unknown event type, empty url, etc.).
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
     get:
       operationId: listWebhookEndpoints
       x-woopsocial-mcp-tool-name: webhooks_list_endpoints
@@ -815,6 +857,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/WebhookEndpoint"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /webhooks/{webhookId}:
     delete:
       operationId: deleteWebhookEndpoint
@@ -836,6 +880,8 @@ paths:
           description: Endpoint deleted.
         "404":
           description: Endpoint not found.
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /health:
     get:
       operationId: getHealth
@@ -853,6 +899,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
 components:
   parameters:
     ProjectIdFilter:
@@ -1000,7 +1048,38 @@ components:
       type: http
       scheme: bearer
       bearerFormat: API key
+  responses:
+    TooManyConcurrentRequests:
+      description: Too many requests are already in progress for this API key.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before retrying.
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            example: 1
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ConcurrencyLimitErrorResponse"
   schemas:
+    ConcurrencyLimitErrorCode:
+      type: string
+      enum:
+        - TOO_MANY_CONCURRENT_REQUESTS
+    ConcurrencyLimitErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: "#/components/schemas/ConcurrencyLimitErrorCode"
+        message:
+          type: string
     WebhookEventType:
       type: string
       enum:
@@ -1466,7 +1545,8 @@ components:
         scheduledFor:
           type: string
           format: date-time
-          description: UTC time (ISO 8601) when the post should be published.
+          description: |
+            UTC time (ISO 8601) when the post should be published. The value must be in the future.
     CreatePostRequest:
       type: object
       additionalProperties: false
@@ -2008,7 +2088,6 @@ components:
       type: object
       required:
         - postType
-        - privacyLevel
         - allowComment
         - allowDuet
         - allowStitch
@@ -2040,6 +2119,7 @@ components:
             Fields not used by the selected mode may be ignored by TikTok.
         privacyLevel:
           $ref: "#/components/schemas/TikTokPrivacyLevel"
+          description: Required when `postMode=DIRECT_POST`. Not used for `MEDIA_UPLOAD`.
         allowComment:
           type: boolean
           description: Whether comments should be allowed for this TikTok post.
