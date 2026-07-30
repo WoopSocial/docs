@@ -28,3 +28,9 @@ All endpoints should include the API key in the `Authorization` header:
 ```bash
 Authorization: Bearer YOUR_API_KEY
 ```
+
+## Concurrency limits
+
+Each API key can have up to five REST API requests in progress at the same time. This allowance is shared across endpoints. For example, three media uploads and two post creation requests use all five available slots.
+
+When all five slots are in use, additional requests are rejected immediately with `429 Too Many Requests` and a `Retry-After: 1` header. Wait at least one second before retrying. A slot becomes available when an in-progress request finishes.
