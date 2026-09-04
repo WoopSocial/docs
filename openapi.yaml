@@ -2066,6 +2066,12 @@ components:
             Optional image media reference to use as the cover image for an Instagram Reel.
 
             This field applies only to `postType=REEL`.
+        trialParams:
+          $ref: "#/components/schemas/InstagramTrialParams"
+          description: |
+            Optional Trial Reel settings. When provided, `postType` must be `REEL`.
+
+            Omit this field to publish a regular Reel.
     FacebookFields:
       type: object
       required:
@@ -2384,6 +2390,7 @@ components:
         - CONTENT
         - TITLE
         - FIRST_COMMENT
+        - INSTAGRAM_TRIAL_PARAMS
         - TIKTOK_PRIVACY_LEVEL
         - TIKTOK_CONTENT_DISCLOSURE
         - YOUTUBE_PRIVACY
@@ -2536,6 +2543,23 @@ components:
         - POST
         - REEL
         - STORY
+    InstagramTrialParams:
+      type: object
+      additionalProperties: false
+      required:
+        - graduationStrategy
+      properties:
+        graduationStrategy:
+          $ref: "#/components/schemas/InstagramTrialGraduationStrategy"
+    InstagramTrialGraduationStrategy:
+      type: string
+      description: |
+        Controls how a Trial Reel graduates to followers. `MANUAL` leaves graduation
+        to the user in Instagram. `SS_PERFORMANCE` lets Instagram graduate the Reel
+        automatically based on its performance.
+      enum:
+        - MANUAL
+        - SS_PERFORMANCE
     FacebookPostType:
       type: string
       enum:
