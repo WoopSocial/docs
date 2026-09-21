@@ -344,7 +344,7 @@ paths:
       description: |
         Returns standalone social account posts for the API key's organization.
 
-        Each item includes the content, schedule and delivery status for a given social account target.
+        Each item includes the content, schedule, delivery status and latest stored analytics for a given social account target.
       parameters:
         - $ref: "#/components/parameters/ProjectIdsFilter"
         - $ref: "#/components/parameters/SocialAccountIdsFilter"
@@ -1928,6 +1928,7 @@ components:
         - schedule
         - createdAt
         - updatedAt
+        - analytics
       properties:
         socialAccountPostId:
           type: string
@@ -1968,6 +1969,67 @@ components:
           format: uri
         errorMessage:
           type: string
+        analytics:
+          $ref: "#/components/schemas/PostAnalytics"
+    PostAnalytics:
+      type: object
+      additionalProperties: false
+      description: |
+        Latest stored lifetime metrics for this social account post. Each supported
+        metric contains its latest snapshot, or an empty array if no observation
+        exists. Unsupported metrics are omitted; unsupported platforms and post
+        types return an empty object. Zero is a recorded value, not missing data.
+
+        Metrics are collected asynchronously and can have different snapshot dates.
+        Reading posts does not refresh analytics. Arrays allow future snapshot
+        ranges without changing the response shape; date-range queries are not
+        currently supported.
+      properties:
+        views:
+          $ref: "#/components/schemas/PostAnalyticsSnapshots"
+        impressions:
+          $ref: "#/components/schemas/PostAnalyticsSnapshots"
+        uniqueImpressions:
+          $ref: "#/components/schemas/PostAnalyticsSnapshots"
+        likes:
+          $ref: "#/components/schemas/PostAnalyticsSnapshots"
+        reactions:
+          $ref: "#/components/schemas/PostAnalyticsSnapshots"
+        comments:
+          $ref: "#/components/schemas/PostAnalyticsSnapshots"
+        shares:
+          $ref: "#/components/schemas/PostAnalyticsSnapshots"
+        saves:
+          $ref: "#/components/schemas/PostAnalyticsSnapshots"
+        clicks:
+          $ref: "#/components/schemas/PostAnalyticsSnapshots"
+        engagementRate:
+          $ref: "#/components/schemas/PostAnalyticsSnapshots"
+          description: LinkedIn Pages provider-reported engagement ratio; 0.03 means 3 percent.
+    PostAnalyticsSnapshots:
+      type: array
+      items:
+        $ref: "#/components/schemas/PostAnalyticsSnapshot"
+    PostAnalyticsSnapshot:
+      type: object
+      additionalProperties: false
+      required:
+        - date
+        - collectedAt
+        - value
+      properties:
+        date:
+          type: string
+          format: date
+          description: UTC date of the snapshot, not the day the engagement occurred.
+        collectedAt:
+          type: string
+          format: date-time
+          description: UTC collection timestamp for this observation.
+        value:
+          type: number
+          format: double
+          description: Observed lifetime count, or a ratio for engagementRate.
     PinterestPlatform:
       type: object
       required:
