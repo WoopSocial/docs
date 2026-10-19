@@ -228,6 +228,12 @@ paths:
       operationId: validatePost
       x-woopsocial-mcp-tool-name: posts_validate
       x-woopsocial-mcp-simple-alias: posts_validate_simple
+      x-woopsocial-mcp-description: |
+        Validates a post without creating one.
+
+        This tool applies the same validation rules as `posts_create`,
+        including social account resolution, platform-specific validation, and
+        media validation for referenced media library items.
       tags:
         - Posts
       security:
@@ -236,7 +242,7 @@ paths:
       description: |
         Validates a post without creating one.
 
-        This endpoint applies the same validation rules as `POST /posts`,
+        This endpoint applies the same validation rules as [`POST /posts`](/api-reference/posts/create-post),
         including social account resolution, platform-specific validation, and
         media validation for referenced media library items.
       requestBody:
@@ -464,6 +470,15 @@ paths:
     post:
       operationId: createOAuthAuthorization
       x-woopsocial-mcp-tool-name: oauth_create_authorization
+      x-woopsocial-mcp-description: |
+        Generates a browser authorization URL for connecting a new social account to a project.
+
+        Flow:
+        1. Call this tool with the `projectId` and target `platform`. Omit `redirectUrl` unless the user asks for one.
+        2. Give the returned `url` to the user and ask them to open it in their browser and complete the authorization.
+        3. Once the user says they are done, call `social_accounts_list` with the `projectId` to confirm the connected account.
+
+        For Facebook, WoopSocial shows a page-selection screen after authorization. The selected pages are connected to the `projectId`.
       tags:
         - Social Accounts
       security:
@@ -484,8 +499,8 @@ paths:
         4. After OAuth completes, WoopSocial redirects the browser back to `redirectUrl`
            with result query parameters.
         5. Use `projectId` and `socialAccountIds` from the redirect, or call
-           `GET /social-accounts?projectId=...`, to store or confirm the connected account
-           in your application.
+           [`GET /social-accounts?projectId=...`](/api-reference/social-accounts/list-social-accounts),
+           to store or confirm the connected account in your application.
 
         When `redirectUrl` is provided, the browser is redirected back to that URL after
         the OAuth callback is handled.
@@ -728,9 +743,19 @@ paths:
       x-woopsocial-mcp-description: |
         This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner.
         Calling this creates an upload session and returns presigned URLs for uploading the file in parts.
-        
-        The presigned URLs are hosted on Cloudflare. If your MCP client has restrictions on which domains it is allowed to send data to, you will need to add `r2.cloudflarestorage.com` to your MCP client's approved domains.
-        On Claude Desktop, you can do this in Settings > Capabilities > Scroll Down > Domain Allowlist > enter 'r2.cloudflarestorage.com'.
+
+        Upload the file in `partCount` parts by sending an HTTP PUT with the raw bytes of each part to the matching
+        `parts[n].uploadUrl`. Every part except the last must be exactly `partSizeInBytes` bytes. The last part may be smaller.
+        After all parts have been uploaded, call `media_uploads_complete_session` to finalize the upload and create the media item.
+        The presigned URLs expire at `expiresAt`.
+
+        Uploading the parts requires making HTTP requests yourself (for example with curl in a shell or code execution tool).
+        If you cannot make HTTP requests, tell the user the upload is not possible from this client.
+
+        The presigned URLs are hosted on Cloudflare R2 (`<account-id>.r2.cloudflarestorage.com`).
+        If a network allowlist blocks the PUT, ask the user to allow `*.r2.cloudflarestorage.com`:
+        - claude.ai / Claude Desktop chat: Settings > Capabilities, in the code execution network settings.
+        - Claude Code: the sandbox's allowed network domains in settings.json.
       tags:
         - Media
       security:
@@ -786,7 +811,7 @@ paths:
     post:
       operationId: completeUploadSession
       x-woopsocial-mcp-tool-name: media_uploads_complete_session
-      x-woopsocial-mcp-description: Completes the upload session started by `createUploadSession`.
+      x-woopsocial-mcp-description: Completes the upload session started by `media_uploads_create_session`.
       tags:
         - Media
       security:
@@ -1413,6 +1438,7 @@ components:
         mediaId:
           type: string
           description: Media identifier create by calling [`POST /media/upload-sessions`](/api-reference/media/start-media-upload-session) or [`POST /media`](/api-reference/media/upload-media).
+          x-woopsocial-mcp-description: Media library item identifier, returned by `media_uploads_complete_session` or listed by `media_list`.
     PostContentMedia:
       description: |
         Resolved content media.

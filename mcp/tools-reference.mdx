@@ -10,7 +10,7 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | Tool | Description |
 | --- | --- |
 | <code>posts_create</code> | Creates a (parent) post with one or more social account (child) posts. |
-| <code>posts_validate</code> | Validates a post without creating one. |
+| <code>posts_validate</code> | Validates a post without creating one.  This tool applies the same validation rules as `posts_create`, including social account resolution, platform-specific validation, and media validation for referenced media library items. |
 | <code>posts_get</code> | Returns one post with its social account posts inline. |
 | <code>posts_delete</code> | Deletes one scheduled post by post ID. |
 | <code>social_account_posts_list</code> | Returns standalone social account posts for the API key's organization. |
@@ -28,7 +28,7 @@ description: "Tool names exposed by the WoopSocial MCP server"
 
 | Tool | Description |
 | --- | --- |
-| <code>oauth_create_authorization</code> | Generates a browser authorization URL for connecting a new social account to a project. |
+| <code>oauth_create_authorization</code> | Generates a browser authorization URL for connecting a new social account to a project.  Flow: 1. Call this tool with the `projectId` and target `platform`. Omit `redirectUrl` unless the user asks for one. 2. Give the returned `url` to the user and ask them to open it in their browser and complete the authorization. 3. Once the user says they are done, call `social_accounts_list` with the `projectId` to confirm the connected account.  For Facebook, WoopSocial shows a page-selection screen after authorization. The selected pages are connected to the `projectId`. |
 | <code>social_accounts_list</code> | Returns social accounts that can currently be used for publishing. |
 | <code>social_accounts_delete</code> | Deletes one social account connection by ID. |
 | <code>social_accounts_get_platform_inputs</code> | Returns platform-specific input options for a connected social account. |
@@ -39,9 +39,9 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | --- | --- |
 | <code>media_list</code> | Returns media library items that belong to the API key's organization. |
 | <code>media_delete</code> | Deletes one media item by ID. |
-| <code>media_uploads_create_session</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts.  The presigned URLs are hosted on Cloudflare. If your MCP client has restrictions on which domains it is allowed to send data to, you will need to add `r2.cloudflarestorage.com` to your MCP client's approved domains. On Claude Desktop, you can do this in Settings > Capabilities > Scroll Down > Domain Allowlist > enter 'r2.cloudflarestorage.com'. |
+| <code>media_uploads_create_session</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts.  Upload the file in `partCount` parts by sending an HTTP PUT with the raw bytes of each part to the matching `parts[n].uploadUrl`. Every part except the last must be exactly `partSizeInBytes` bytes. The last part may be smaller. After all parts have been uploaded, call `media_uploads_complete_session` to finalize the upload and create the media item. The presigned URLs expire at `expiresAt`.  Uploading the parts requires making HTTP requests yourself (for example with curl in a shell or code execution tool). If you cannot make HTTP requests, tell the user the upload is not possible from this client.  The presigned URLs are hosted on Cloudflare R2 (`<account-id>.r2.cloudflarestorage.com`). If a network allowlist blocks the PUT, ask the user to allow `*.r2.cloudflarestorage.com`: - claude.ai / Claude Desktop chat: Settings > Capabilities, in the code execution network settings. - Claude Code: the sandbox's allowed network domains in settings.json. |
 | <code>media_uploads_get_session</code> | Get media upload session status |
-| <code>media_uploads_complete_session</code> | Completes the upload session started by `createUploadSession`. |
+| <code>media_uploads_complete_session</code> | Completes the upload session started by `media_uploads_create_session`. |
 
 ## Webhooks
 
