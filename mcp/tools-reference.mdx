@@ -56,3 +56,13 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | Tool | Description |
 | --- | --- |
 | <code>health_get</code> | Returns a minimal response proving the WoopSocial API is reachable. |
+
+## Fallback tools
+
+Workarounds for MCP clients that can't load a tool's full input schema. Prefer the tools above when your client supports them.
+
+| Tool | Description |
+| --- | --- |
+| <code>posts_create_simple</code> | Compatibility workaround for MCP clients that cannot load the full `posts_create` input schema. This is not a simplified input format and uses the same validation and behavior as `posts_create`. Prefer `posts_create` when available. To call this fallback: call `schema_describe` with `toolName: "posts_create_simple"`, construct an object matching the returned canonical schema, JSON-encode the entire object, and pass that string as `requestJson`. Do not pass canonical fields such as `content`, `schedule`, or `socialAccounts` directly to this tool. |
+| <code>posts_validate_simple</code> | Compatibility workaround for MCP clients that cannot load the full `posts_validate` input schema. This is not a simplified input format and uses the same validation and behavior as `posts_validate`. Prefer `posts_validate` when available. To call this fallback: call `schema_describe` with `toolName: "posts_validate_simple"`, construct an object matching the returned canonical schema, JSON-encode the entire object, and pass that string as `requestJson`. Do not pass canonical fields such as `content`, `schedule`, or `socialAccounts` directly to this tool. |
+| <code>schema_describe</code> | Returns the canonical input schema. |

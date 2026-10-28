@@ -29,6 +29,10 @@ paths:
       operationId: createPost
       x-woopsocial-mcp-tool-name: posts_create
       x-woopsocial-mcp-simple-alias: posts_create_simple
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: true
+        openWorldHint: true
       tags:
         - Posts
       security:
@@ -242,6 +246,10 @@ paths:
       operationId: validatePost
       x-woopsocial-mcp-tool-name: posts_validate
       x-woopsocial-mcp-simple-alias: posts_validate_simple
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: true
+        destructiveHint: false
+        openWorldHint: false
       x-woopsocial-mcp-description: |
         Validates a post without creating one.
 
@@ -284,6 +292,10 @@ paths:
     get:
       operationId: getPost
       x-woopsocial-mcp-tool-name: posts_get
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: true
+        destructiveHint: false
+        openWorldHint: false
       tags:
         - Posts
       security:
@@ -317,6 +329,11 @@ paths:
     delete:
       operationId: deletePost
       x-woopsocial-mcp-tool-name: posts_delete
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: true
+        openWorldHint: false
+        idempotentHint: true
       tags:
         - Posts
       security:
@@ -356,6 +373,10 @@ paths:
     get:
       operationId: listSocialAccountPosts
       x-woopsocial-mcp-tool-name: social_account_posts_list
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: true
+        destructiveHint: false
+        openWorldHint: false
       tags:
         - Posts
       security:
@@ -386,6 +407,11 @@ paths:
     delete:
       operationId: deleteSocialAccountPost
       x-woopsocial-mcp-tool-name: social_account_posts_delete
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: true
+        openWorldHint: false
+        idempotentHint: true
       tags:
         - Posts
       security:
@@ -416,6 +442,10 @@ paths:
     post:
       operationId: createProject
       x-woopsocial-mcp-tool-name: projects_create
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: false
+        openWorldHint: false
       tags:
         - Projects
       security:
@@ -444,6 +474,10 @@ paths:
     get:
       operationId: listProjects
       x-woopsocial-mcp-tool-name: projects_list
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: true
+        destructiveHint: false
+        openWorldHint: false
       tags:
         - Projects
       security:
@@ -465,6 +499,11 @@ paths:
     delete:
       operationId: deleteProject
       x-woopsocial-mcp-tool-name: projects_delete
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: true
+        openWorldHint: false
+        idempotentHint: true
       tags:
         - Projects
       security:
@@ -484,6 +523,10 @@ paths:
     post:
       operationId: createOAuthAuthorization
       x-woopsocial-mcp-tool-name: oauth_create_authorization
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: false
+        openWorldHint: false
       x-woopsocial-mcp-description: |
         Generates a browser authorization URL for connecting a new social account to a project.
 
@@ -561,6 +604,10 @@ paths:
     get:
       operationId: listSocialAccounts
       x-woopsocial-mcp-tool-name: social_accounts_list
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: true
+        destructiveHint: false
+        openWorldHint: false
       tags:
         - Social Accounts
       security:
@@ -587,6 +634,11 @@ paths:
     delete:
       operationId: deleteSocialAccount
       x-woopsocial-mcp-tool-name: social_accounts_delete
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: true
+        openWorldHint: false
+        idempotentHint: true
       tags:
         - Social Accounts
       security:
@@ -621,6 +673,10 @@ paths:
     get:
       operationId: getSocialAccountPlatformInputs
       x-woopsocial-mcp-tool-name: social_accounts_get_platform_inputs
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: true
+        destructiveHint: false
+        openWorldHint: false
       tags:
         - Social Accounts
       security:
@@ -646,6 +702,10 @@ paths:
     get:
       operationId: listMedia
       x-woopsocial-mcp-tool-name: media_list
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: true
+        destructiveHint: false
+        openWorldHint: false
       tags:
         - Media
       security:
@@ -724,6 +784,11 @@ paths:
     delete:
       operationId: deleteMedia
       x-woopsocial-mcp-tool-name: media_delete
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: true
+        openWorldHint: false
+        idempotentHint: true
       tags:
         - Media
       security:
@@ -754,6 +819,10 @@ paths:
     post:
       operationId: createUploadSession
       x-woopsocial-mcp-tool-name: media_uploads_create_session
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: false
+        openWorldHint: false
       x-woopsocial-mcp-description: |
         This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner.
         Calling this creates an upload session and returns presigned URLs for uploading the file in parts.
@@ -805,6 +874,10 @@ paths:
     get:
       operationId: getUploadSession
       x-woopsocial-mcp-tool-name: media_uploads_get_session
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: true
+        destructiveHint: false
+        openWorldHint: false
       tags:
         - Media
       security:
@@ -825,6 +898,10 @@ paths:
     post:
       operationId: completeUploadSession
       x-woopsocial-mcp-tool-name: media_uploads_complete_session
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: false
+        openWorldHint: false
       x-woopsocial-mcp-description: Completes the upload session started by `media_uploads_create_session`.
       tags:
         - Media
@@ -847,6 +924,10 @@ paths:
     post:
       operationId: createWebhookEndpoint
       x-woopsocial-mcp-tool-name: webhooks_create_endpoint
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: false
+        openWorldHint: true
       tags:
         - Webhooks
       security:
@@ -881,6 +962,10 @@ paths:
     get:
       operationId: listWebhookEndpoints
       x-woopsocial-mcp-tool-name: webhooks_list_endpoints
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: true
+        destructiveHint: false
+        openWorldHint: false
       tags:
         - Webhooks
       security:
@@ -902,6 +987,11 @@ paths:
     delete:
       operationId: deleteWebhookEndpoint
       x-woopsocial-mcp-tool-name: webhooks_delete_endpoint
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: true
+        openWorldHint: false
+        idempotentHint: true
       tags:
         - Webhooks
       security:
@@ -925,6 +1015,10 @@ paths:
     get:
       operationId: getHealth
       x-woopsocial-mcp-tool-name: health_get
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: true
+        destructiveHint: false
+        openWorldHint: false
       tags:
         - Health
       security:
@@ -1270,6 +1364,7 @@ components:
         - missing_code
         - oauth_client_unavailable
         - token_exchange_failed
+        - facebook_no_pages
         - no_tokens
         - account_persistence_failed
         - grant_persistence_failed
@@ -1277,6 +1372,13 @@ components:
       description: |
         Error code appended to `redirectUrl` as the `error` query parameter when
         OAuth fails after WoopSocial has recovered the callback state.
+
+        `facebook_no_pages` means Facebook granted access to no Page. Either the user
+        has no Facebook Page (WoopSocial posts to Pages, not personal profiles), or
+        Facebook's "all current and future Pages" option left their Pages out. Ask the
+        user to remove WoopSocial under Facebook's Business Integrations
+        (https://www.facebook.com/settings/?tab=business_tools), connect again, and
+        choose "Opt in to current Pages only" with every Page ticked.
     CreateOAuthAuthorizationResponse:
       type: object
       additionalProperties: false
