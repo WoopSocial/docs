@@ -1,6 +1,6 @@
 ---
 title: "Integrating MCP in AI Agents, Claude, ChatGPT"
-description: "Set up Claude Desktop, Claude Code, Cursor, ChatGPT, and other MCP clients with WoopSocial"
+description: "Set up Claude, Claude Code, Cursor, ChatGPT, and other MCP clients with WoopSocial"
 ---
 
 Use this page to connect the WoopSocial MCP server to your AI agent, Claude, ChatGPT or your CLI.
@@ -13,35 +13,41 @@ Use this page to connect the WoopSocial MCP server to your AI agent, Claude, Cha
 
 ## Select your AI tool or Agent
 
-- [Claude Chat / Cowork](#claude-cowork)
+- [Claude (web, Desktop, Cowork)](#claude-cowork)
 - [Claude Code](#claude-code)
 - [Codex](#codex)
-- [All AI Agents](#ai-agents)
 - [ChatGPT](#chatgpt)
 - [Notion](#notion)
 - [Gemini CLI](#gemini-cli)
 - [Cursor](#cursor)
+- [Other AI agents](#ai-agents)
 
-## Claude Chat / Cowork {#claude-cowork}
+## Claude (web, Desktop, Cowork) {#claude-cowork}
 
-1. Grab your MCP link from your [API Key Page](https://app.woopsocial.com/api-access)
-2. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
-3. Then go to your Claude app
-4. Go to **Settings** in Claude → **Connectors** → **Customize**
-5. Click **Add Connector** → **Add Custom Connector**
-6. Name it ‘woopsocial’ and use [https://api.woopsocial.com/mcp](https://api.woopsocial.com/mcp) as the URL
-7. Click **Add** and **Authorize** on the next page
-8. **Start a new Chat** in Claude → Ask it to write a test post to your social account for tomorrow
-9. It will find your **Project ID** and **Social Account ID** and will schedule a test post for tomorrow
-10. If you want, you can delete the post straight away
+WoopSocial is listed in Claude's Connectors Directory as a Community connector. You don't need an API key or an MCP URL.
 
-**Note:** You might need to add the media server (where your images and videos are stored) to your allowed domains by going to **Settings** → **Capabilities** → **Domain Allowlist** → **Add**`*.cloudflarestorage.com`(including the asterisk/star)
+1. Open the [WoopSocial connector](https://claude.ai/directory/woopsocial) in Claude's Connectors Directory and add it to Claude. If you aren't signed in to Claude, you'll be asked to sign in first.
+2. Read the notice Claude shows for Community connectors, then continue
+3. Sign in to WoopSocial, or create a free account, and click **Authorize**
+4. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
+5. **Start a new Chat** in Claude. If WoopSocial isn't turned on, click **+** → **Connectors** and toggle it on
+6. Ask Claude to write a test post to your social account for tomorrow
+7. It will find your **Project ID** and **Social Account ID** and will schedule a test post for tomorrow
+8. If you want, you can delete the post straight away
+
+The connector belongs to your Claude account, so you only add it once.
+
+**Can't use the directory?** Add WoopSocial as a custom connector instead. Go to **Customize** → **Connectors** → **+ Add** → **Add custom connector**, name it `woopsocial`, use `https://api.woopsocial.com/mcp` as the URL and follow the prompts. On Team and Enterprise plans, an owner adds connectors in **Organization settings** → **Connectors**.
+
+**Note:** Text posts work in any chat. To upload images and videos from a chat, Claude needs code execution turned on and access to `*.r2.cloudflarestorage.com` (including the asterisk/star), where your media is stored. You can set both in **Settings** → **Capabilities**, in the code execution network settings.
 
 Issues? Just use the chat button in the bottom right and we’ll help you out.
 
 ## Claude Code CLI {#claude-code}
 
-Use the `claude mcp add` command to register WoopSocial with Claude Code.
+If you added the [Claude connector](#claude-cowork) and sign in to Claude Code with the same Claude account, WoopSocial is already available. Type `/mcp` in Claude Code to check.
+
+Otherwise, use the `claude mcp add` command to register WoopSocial with Claude Code.
 
 ```bash
 claude mcp add --transport http woopsocial "https://api.woopsocial.com/mcp"
@@ -75,9 +81,74 @@ codex mcp login woopsocial
 
 Issues? Just use the chat button in the bottom right and we’ll help you out.
 
+## ChatGPT {#chatgpt}
+
+1. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
+2. Now go to your ChatGPT dashboard
+3. Open `Settings`.
+
+![Open ChatGPT settings](/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%201.png)
+
+4. Open `Apps`.
+5. Enable `Developer Mode` if it is not already enabled.
+
+![Enable Developer Mode in ChatGPT](/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%202.png)
+
+6. Select `Create App`.
+7. Enter these values:
+
+- Name: `WoopSocial`
+- Description: `Publish social media content`
+- MCP Server URL: `https://api.woopsocial.com/mcp`
+- Authentication: `OAuth`
+
+8. Save the app.
+9. This should take you to WoopSocial where you can Authorize the MCP connection. Click the "**Authorize**" button.
+10. Return to ChatGPT and start a new chat
+11. Ask ChatGPT to do something with the MCP. For example tell it to "List my social accounts in woopsocial" or "Create a new post for my Facebook account and schedule it for tomorrow 1pm"
+
+![Test the ChatGPT app by listing social accounts](/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%204.png)
+
+Issues? Just use the chat button in the bottom right and we’ll help you out.
+
+## Notion {#notion}
+
+1. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
+2. In Notion, click your workspace name in the sidebar and select **Settings**
+3. Open **Connections**, then click **Add connection** → **Custom MCP connection**
+4. Enter `https://api.woopsocial.com/mcp` as the MCP server URL
+5. Click **Connect**, then sign in to WoopSocial and click **Authorize**
+6. Ask the chat to “Find my project ID and find my social account IDs with the Woopsocial tools. Then schedule a test post for tomorrow”
+7. Delete the test post and start creating your own content
+
+Issues? Just use the chat button in the bottom right and we’ll help you out.
+
+## Gemini CLI {#gemini-cli}
+
+1. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
+2. Run:\
+   `gemini mcp add woopsocial npx -y mcp-remote ` `https://api.woopsocial.com/mcp`
+3. Or `edit ~/.gemini/settings.json manually` and add:\
+   `{  "mcpServers": {    "woopsocial": {      "command": "npx",      "args": ["-y", "mcp-remote", "https://api.woopsocial.com/mcp"]    }  }}`
+4. Put the following prompt in Gemini: “Find my project ID and find my social account IDs with the Woopsocial tools. Then schedule a test post for tomorrow”
+5. Delete the test post and start creating your own content
+
+Issues? Just use the chat button in the bottom right and we’ll help you out.
+
+## Cursor {#cursor}
+
+1. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
+2. Simply [<u>go to our official Cursor Directory Page</u>](https://cursor.directory/plugins/woopsocial-social-media-scheduler)
+3. Click “**Add to Cursor**”
+4. Run through the authorization sequence
+5. Put the following prompt in Cursor: “Find my project ID and find my social account IDs with the Woopsocial tools. Then schedule a test post for tomorrow”
+6. Delete the test post and start creating your own content
+
+Issues? Just use the chat button in the bottom right and we’ll help you out.
+
 ## Get your MCP URL for other AI agents {#ai-agents}
 
-Claude Code above used our OAuth-based MCP authentication but this is not yet compatible with all AI agents. In such cases, please follow the procedure below which will generate an MCP URL for you backed by an API key.
+The clients on this page sign in with OAuth, so they don't need this. Use it only if your AI agent doesn't support OAuth yet. The procedure below generates an MCP URL backed by an API key. The URL contains your key, so keep it private.
 
 1. Open the [WoopSocial dashboard API page](https://app.woopsocial.com/api-access).
 2. Click on the "Create API key" button.
@@ -101,75 +172,6 @@ https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY
 
 Issues? Just use the chat button in the bottom right and we’ll help you out.
 
-## ChatGPT {#chatgpt}
-
-1. Grab your MCP link from your [API Key Page](https://app.woopsocial.com/api-access)
-2. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
-3. Now go to your ChatGPT dashboard
-4. Open `Settings`.
-
-![Open ChatGPT settings](/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%201.png)
-
-5. Open `Apps`.
-6. Enable `Developer Mode` if it is not already enabled.
-
-![Enable Developer Mode in ChatGPT](/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%202.png)
-
-7. Select `Create App`.
-8. Enter these values:
-
-- Name: `WoopSocial`
-- Description: `Publish social media content`
-- MCP Server URL: paste the MCP URL you copied earlier
-- Authentication: `No Auth`
-
-![Create the WoopSocial app in ChatGPT](/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%203.png)
-
-9. Save the app.
-10. Return to ChatGPT and start a new chat
-11. Ask ChatGPT to do something with the MCP. For example tell it to "List my social accounts in woopsocial" or "Create a new post for my Facebook account and schedule it for tomorrow 1pm"
-
-![Test the ChatGPT app by listing social accounts](/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%204.png)
-
-Issues? Just use the chat button in the bottom right and we’ll help you out.
-
-## Notion {#notion}
-
-1. Grab your MCP link from your [API Key Page](https://app.woopsocial.com/api-access)
-2. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
-3. Now go to your Notion dashboard
-4. Go to Settings → Connections → \+ Add Custom MCP
-5. Enter your unique MCP Server URL (from step 1) and name it “woopSocial”
-6. Click Connect and complete the OAuth flow
-7. Ask the chat to “Find my project ID and find my social account IDs with the Woopsocial tools. Then schedule a test post for tomorrow”
-8. Delete the test post and start creating your own content
-
-Issues? Just use the chat button in the bottom right and we’ll help you out.
-
-## Gemini CLI {#gemini-cli}
-
-1. Grab your MCP link from your [API Key Page](https://app.woopsocial.com/api-access)
-2. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
-3. Run:\
-   `gemini mcp add woopsocial npx -y mcp-remote ` `https://api.woopsocial.com/mcp`
-4. Or `edit ~/.gemini/settings.json manually` and add:\
-   `{  "mcpServers": {    "woopsocial": {      "command": "npx",      "args": ["-y", "mcp-remote", "https://api.woopsocial.com/mcp"]    }  }}`
-5. Put the following prompt in Gemini: “Find my project ID and find my social account IDs with the Woopsocial tools. Then schedule a test post for tomorrow”
-6. Delete the test post and start creating your own content
-
-Issues? Just use the chat button in the bottom right and we’ll help you out.
-
-## Cursor {#cursor}
-
-1. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
-2. Simply [<u>go to our official Cursor Directory Page</u>](https://cursor.directory/plugins/woopsocial-social-media-scheduler)
-3. Click “**Add to Cursor**”
-4. Run through the authorization sequence
-5. Put the following prompt in Cursor: “Find my project ID and find my social account IDs with the Woopsocial tools. Then schedule a test post for tomorrow”
-6. Delete the test post and start creating your own content
-
-Issues? Just use the chat button in the bottom right and we’ll help you out.
-
 # Media upload fix for Claude and ChatGPT
 
-If the client has an allowlist for outbound domains, add `*.cloudflarestorage.com` so media uploads work.
+If the client has an allowlist for outbound domains, add `*.r2.cloudflarestorage.com` so media uploads work. In Claude Code, add it to the sandbox's allowed network domains in `settings.json`.
