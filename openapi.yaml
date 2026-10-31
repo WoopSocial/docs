@@ -21,6 +21,8 @@ tags:
     description: Media upload endpoints.
   - name: Webhooks
     description: Webhook endpoint management.
+  - name: Feedback
+    description: Send product feedback to the WoopSocial team.
   - name: Health
     description: Basic connectivity endpoints.
 paths:
@@ -1011,6 +1013,35 @@ paths:
           description: Endpoint not found.
         "429":
           $ref: "#/components/responses/TooManyConcurrentRequests"
+  /feedback:
+    post:
+      operationId: sendFeedback
+      x-woopsocial-mcp-exclude: true
+      tags:
+        - Feedback
+      security:
+        - ApiKey: []
+      summary: Send feedback
+      description: |
+        Sends a short note about WoopSocial to the WoopSocial team. The note is
+        stored and emailed to the team.
+
+        Each organization can send a limited number of notes per day.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendFeedbackRequest"
+      responses:
+        "200":
+          description: Feedback received.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SendFeedbackResponse"
+        "429":
+          $ref: "#/components/responses/FeedbackTooManyRequests"
   /health:
     get:
       operationId: getHealth
@@ -1197,7 +1228,62 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/ConcurrencyLimitErrorResponse"
+    FeedbackTooManyRequests:
+      description: Too many requests are in progress for this API key, or the organization reached its daily feedback limit.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before retrying. Sent only when too many requests are in progress.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            example: 1
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: "#/components/schemas/ConcurrencyLimitErrorResponse"
+              - $ref: "#/components/schemas/FeedbackLimitErrorResponse"
   schemas:
+    FeedbackCategory:
+      type: string
+      description: What the note is about.
+      enum:
+        - BUG
+        - FEATURE_REQUEST
+        - CONFUSING_DOCS
+        - OTHER
+    SendFeedbackRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - category
+        - message
+      properties:
+        category:
+          $ref: "#/components/schemas/FeedbackCategory"
+        message:
+          type: string
+          minLength: 1
+          maxLength: 4000
+          description: The note to send to the WoopSocial team.
+    SendFeedbackResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - received
+      properties:
+        received:
+          type: boolean
+          description: Whether the WoopSocial team received the note.
+    FeedbackLimitErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - error_message
+      properties:
+        error_message:
+          type: string
     ConcurrencyLimitErrorCode:
       type: string
       enum:
