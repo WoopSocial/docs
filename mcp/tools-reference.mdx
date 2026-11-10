@@ -32,6 +32,7 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | <code>social_accounts_list</code> | Returns social accounts that can currently be used for publishing. |
 | <code>social_accounts_delete</code> | Deletes one social account connection by ID. |
 | <code>social_accounts_get_platform_inputs</code> | Returns platform-specific input options for a connected social account. |
+| <code>social_accounts_get_analytics</code> | Returns account-level metrics of one social account over a range of UTC days: its follower count and the views, engagements and other activity across all of its content. Per-post metrics are in each social account post's `analytics`. |
 
 ## Media
 
@@ -56,6 +57,12 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | Tool | Description |
 | --- | --- |
 | <code>health_get</code> | Returns a minimal response proving the WoopSocial API is reachable. |
+
+## Me
+
+| Tool | Description |
+| --- | --- |
+| <code>me_get</code> | Returns the email of the WoopSocial user this connection acts as: the user who approved the OAuth connection, or who created the API key. |
 
 ## Fallback tools
 

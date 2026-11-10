@@ -25,6 +25,8 @@ tags:
     description: Send product feedback to the WoopSocial team.
   - name: Health
     description: Basic connectivity endpoints.
+  - name: Me
+    description: The WoopSocial user a connection acts as.
 paths:
   /posts:
     post:
@@ -700,6 +702,73 @@ paths:
                 $ref: "#/components/schemas/SocialAccountPlatformInputs"
         "429":
           $ref: "#/components/responses/TooManyConcurrentRequests"
+  /social-accounts/{socialAccountId}/analytics:
+    get:
+      operationId: getSocialAccountAnalytics
+      x-woopsocial-mcp-tool-name: social_accounts_get_analytics
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: true
+        destructiveHint: false
+        openWorldHint: false
+      tags:
+        - Social Accounts
+      security:
+        - ApiKey: []
+      summary: Get social account analytics
+      description: |
+        Returns account-level metrics of one social account over a range of UTC
+        days: its follower count and the views, engagements and other activity
+        across all of its content. Per-post metrics are in each social account
+        post's `analytics`.
+
+        Each point covers one UTC day. Metrics are collected about once a day,
+        so the latest day or two may be missing. Reading analytics does not
+        refresh them.
+
+        Metrics by platform:
+        - `FACEBOOK`: followers, views, engagements.
+        - `INSTAGRAM`: followers, views, engagements, likes, comments, shares, saves.
+        - `LINKEDIN_PAGES`: followers, impressions, engagements, likes, comments, shares, clicks.
+        - `PINTEREST`: followers, impressions, engagements, saves, clicks, views (video views).
+        - `YOUTUBE`: followers (subscribers), views, likes, comments, shares.
+        - Other platforms have no account analytics and return empty `metrics`.
+      parameters:
+        - $ref: "#/components/parameters/SocialAccountId"
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: First UTC day of the range, inclusive.
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Last UTC day of the range, inclusive. The range can span at most 366 days.
+      responses:
+        "200":
+          description: Social account analytics.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SocialAccountAnalytics"
+        "400":
+          description: Invalid date range.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetSocialAccountAnalyticsErrorResponse"
+        "404":
+          description: Social account not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetSocialAccountAnalyticsErrorResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /media:
     get:
       operationId: listMedia
@@ -1063,6 +1132,33 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
+  /me:
+    get:
+      operationId: getMe
+      x-woopsocial-mcp-tool-name: me_get
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: true
+        destructiveHint: false
+        openWorldHint: false
+      tags:
+        - Me
+      security:
+        - ApiKey: []
+      summary: Get current user
+      description: |
+        Returns the email of the WoopSocial user this connection acts as: the
+        user who approved the OAuth connection, or who created the API key.
+
+        Use it to tell which WoopSocial account a connection is signed in with.
+      responses:
+        "200":
+          description: The user this connection acts as.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MeResponse"
         "429":
           $ref: "#/components/responses/TooManyConcurrentRequests"
 components:
@@ -2261,6 +2357,113 @@ components:
           type: number
           format: double
           description: Observed lifetime count, or a ratio for engagementRate.
+    SocialAccountAnalytics:
+      type: object
+      additionalProperties: false
+      required:
+        - socialAccountId
+        - platform
+        - metrics
+      properties:
+        socialAccountId:
+          type: string
+          description: Connected social account identifier.
+        platform:
+          $ref: "#/components/schemas/SocialPlatform"
+        metrics:
+          $ref: "#/components/schemas/SocialAccountAnalyticsMetrics"
+    SocialAccountAnalyticsMetrics:
+      type: object
+      additionalProperties: false
+      description: |
+        Account metrics over the range. A metric the platform does not report
+        is omitted. A metric with empty `points` is reported by the platform
+        but has nothing collected in the range yet. A period without a point
+        has nothing collected; zero is a recorded value, not missing data.
+      properties:
+        followers:
+          $ref: "#/components/schemas/AccountFollowersMetric"
+        impressions:
+          $ref: "#/components/schemas/AccountActivityMetric"
+        views:
+          $ref: "#/components/schemas/AccountActivityMetric"
+        engagements:
+          $ref: "#/components/schemas/AccountActivityMetric"
+        likes:
+          $ref: "#/components/schemas/AccountActivityMetric"
+        comments:
+          $ref: "#/components/schemas/AccountActivityMetric"
+        shares:
+          $ref: "#/components/schemas/AccountActivityMetric"
+        saves:
+          $ref: "#/components/schemas/AccountActivityMetric"
+        clicks:
+          $ref: "#/components/schemas/AccountActivityMetric"
+    AccountFollowersMetric:
+      type: object
+      additionalProperties: false
+      description: Follower count. Each point holds the count on the last collected day of its period.
+      required:
+        - points
+      properties:
+        latest:
+          type: number
+          format: double
+          description: Latest follower count in the range. Omitted when `points` is empty.
+        change:
+          type: number
+          format: double
+          description: Latest minus earliest follower count in the range. Omitted when `points` is empty.
+        points:
+          $ref: "#/components/schemas/AccountAnalyticsPoints"
+    AccountActivityMetric:
+      type: object
+      additionalProperties: false
+      description: Activity across the account. Each point adds up the collected days of its period.
+      required:
+        - points
+      properties:
+        total:
+          type: number
+          format: double
+          description: Sum over the collected days of the range. Omitted when `points` is empty.
+        points:
+          $ref: "#/components/schemas/AccountAnalyticsPoints"
+    AccountAnalyticsPoints:
+      type: array
+      description: Points ordered oldest first.
+      items:
+        $ref: "#/components/schemas/AccountAnalyticsPoint"
+    AccountAnalyticsPoint:
+      type: object
+      additionalProperties: false
+      required:
+        - date
+        - value
+      properties:
+        date:
+          type: string
+          format: date
+          description: First UTC day of the period the point covers. Each point currently covers one day.
+        value:
+          type: number
+          format: double
+    GetSocialAccountAnalyticsErrorCode:
+      type: string
+      enum:
+        - SOCIAL_ACCOUNT_NOT_FOUND
+        - INVALID_DATE_RANGE
+    GetSocialAccountAnalyticsErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: "#/components/schemas/GetSocialAccountAnalyticsErrorCode"
+        message:
+          type: string
     PinterestPlatform:
       type: object
       required:
@@ -2404,6 +2607,13 @@ components:
             Optional Trial Reel settings. When provided, `postType` must be `REEL`.
 
             Omit this field to publish a regular Reel.
+        isAiGeneratedContent:
+          type: boolean
+          default: false
+          description: |
+            Whether the Instagram post contains AI-generated content. When true, Instagram shows its "AI info" label on the post.
+
+            Instagram only accepts this flag when the post is created, so it can't be added after publishing.
     FacebookFields:
       type: object
       required:
@@ -2969,3 +3179,17 @@ components:
           description: API version that produced the response.
           examples:
             - v1
+    MeResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        user:
+          type: object
+          additionalProperties: false
+          description: The user this connection acts as. Absent for an API key whose creator was deleted.
+          properties:
+            email:
+              type: string
+              description: The user's email. Absent if the user has none.
+              examples:
+                - jane@example.com
