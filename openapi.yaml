@@ -407,6 +407,74 @@ paths:
                 $ref: "#/components/schemas/ListSocialAccountPostsResponse"
         "429":
           $ref: "#/components/responses/TooManyConcurrentRequests"
+  /social-account-posts/analytics:
+    get:
+      operationId: listSocialAccountPostAnalytics
+      x-woopsocial-mcp-tool-name: social_account_posts_list_analytics
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: true
+        destructiveHint: false
+        openWorldHint: false
+      tags:
+        - Posts
+      security:
+        - ApiKey: []
+      summary: List social account post analytics
+      description: |
+        Returns the organization's social account posts published in a range of
+        UTC days, each with its latest stored metrics. Posts are ordered by
+        `sortBy`, highest first, or newest first when `sortBy` is omitted.
+
+        Metrics are lifetime totals since publishing, as of
+        `metricsCollectedAt`. They are collected about once a day, and reading
+        them does not refresh them.
+
+        What `views` counts by platform:
+        - `INSTAGRAM`, `FACEBOOK`, `THREADS`: times the post was shown, repeats included.
+        - `TIKTOK`, `YOUTUBE`: video plays.
+        - `PINTEREST`: video views. Image Pins have none.
+        - `LINKEDIN_PAGES` reports `impressions` and `uniqueImpressions` instead.
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: First UTC day of the publish range, inclusive.
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Last UTC day of the publish range, inclusive. The range can span at most 366 days.
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/PostMetricName"
+          description: Metric to order the posts by, highest first. Posts without it come last.
+        - $ref: "#/components/parameters/ProjectIdsFilter"
+        - $ref: "#/components/parameters/SocialAccountIdsFilter"
+        - $ref: "#/components/parameters/SocialPlatformFilter"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+      responses:
+        "200":
+          description: Social account post analytics.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListSocialAccountPostAnalyticsResponse"
+        "400":
+          description: Invalid date range or cursor.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListSocialAccountPostAnalyticsErrorResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
   /social-account-posts/{socialAccountPostId}:
     delete:
       operationId: deleteSocialAccountPost
@@ -719,7 +787,7 @@ paths:
         Returns account-level metrics of one social account over a range of UTC
         days: its follower count and the views, engagements and other activity
         across all of its content. Per-post metrics are in each social account
-        post's `analytics`.
+        post's `metrics`.
 
         Each point covers one UTC day. Metrics are collected about once a day,
         so the latest day or two may be missing. Reading analytics does not
@@ -2255,6 +2323,7 @@ components:
         - schedule
         - createdAt
         - updatedAt
+        - metrics
         - analytics
       properties:
         socialAccountPostId:
@@ -2296,12 +2365,22 @@ components:
           format: uri
         errorMessage:
           type: string
+        metrics:
+          $ref: "#/components/schemas/PostMetrics"
+        metricsCollectedAt:
+          type: string
+          format: date-time
+          description: Oldest UTC collection time among `metrics`, so every value is at least this fresh. Omitted when `metrics` is empty.
         analytics:
           $ref: "#/components/schemas/PostAnalytics"
+          deprecated: true
     PostAnalytics:
       type: object
       additionalProperties: false
       description: |
+        Deprecated: use `metrics`, which holds the same latest values as plain
+        numbers.
+
         Latest stored lifetime metrics for this social account post. Each supported
         metric contains its latest snapshot, or an empty array if no observation
         exists. Unsupported metrics are omitted; unsupported platforms and post
@@ -2357,6 +2436,126 @@ components:
           type: number
           format: double
           description: Observed lifetime count, or a ratio for engagementRate.
+    PostMetrics:
+      type: object
+      additionalProperties: false
+      description: |
+        Latest stored lifetime totals of a social account post. A metric is
+        omitted when the platform does not report it or nothing has been
+        collected yet. Zero is a recorded value, not missing data.
+      properties:
+        views:
+          type: number
+          format: double
+        impressions:
+          type: number
+          format: double
+        uniqueImpressions:
+          type: number
+          format: double
+        likes:
+          type: number
+          format: double
+        reactions:
+          type: number
+          format: double
+        comments:
+          type: number
+          format: double
+        shares:
+          type: number
+          format: double
+        saves:
+          type: number
+          format: double
+        clicks:
+          type: number
+          format: double
+        engagementRate:
+          type: number
+          format: double
+          description: LinkedIn Pages provider-reported engagement ratio; 0.03 means 3 percent.
+    PostMetricName:
+      type: string
+      enum:
+        - views
+        - impressions
+        - uniqueImpressions
+        - likes
+        - reactions
+        - comments
+        - shares
+        - saves
+        - clicks
+        - engagementRate
+      description: Name of a `PostMetrics` field.
+    SocialAccountPostAnalytics:
+      type: object
+      additionalProperties: false
+      required:
+        - socialAccountPostId
+        - postId
+        - socialAccountId
+        - platform
+        - deliveryCompletedAt
+        - metrics
+      properties:
+        socialAccountPostId:
+          type: string
+          description: Social account post identifier.
+        postId:
+          type: string
+          description: Parent post identifier.
+        socialAccountId:
+          type: string
+          description: Connected social account identifier.
+        platform:
+          $ref: "#/components/schemas/SocialPlatform"
+        deliveryCompletedAt:
+          type: string
+          format: date-time
+          description: UTC time when the post was published.
+        externalPostUrl:
+          type: string
+          format: uri
+        text:
+          type: string
+          description: First 200 characters of the post's text. Omitted when the post has no text.
+        metrics:
+          $ref: "#/components/schemas/PostMetrics"
+        metricsCollectedAt:
+          type: string
+          format: date-time
+          description: Oldest UTC collection time among `metrics`, so every value is at least this fresh. Omitted when `metrics` is empty.
+    ListSocialAccountPostAnalyticsResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - socialAccountPosts
+      properties:
+        socialAccountPosts:
+          type: array
+          items:
+            $ref: "#/components/schemas/SocialAccountPostAnalytics"
+        nextCursor:
+          type: string
+          description: Opaque cursor for the next page of results. Omitted when there are no more results.
+    ListSocialAccountPostAnalyticsErrorCode:
+      type: string
+      enum:
+        - INVALID_DATE_RANGE
+        - INVALID_CURSOR
+    ListSocialAccountPostAnalyticsErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: "#/components/schemas/ListSocialAccountPostAnalyticsErrorCode"
+        message:
+          type: string
     SocialAccountAnalytics:
       type: object
       additionalProperties: false
