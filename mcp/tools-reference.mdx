@@ -11,7 +11,7 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | --- | --- |
 | <code>posts_create</code> | Creates a (parent) post with one or more social account (child) posts. |
 | <code>posts_validate</code> | Validates a post without creating one.  This tool applies the same validation rules as `posts_create`, including social account resolution, platform-specific validation, and media validation for referenced media library items. |
-| <code>posts_get</code> | Returns one post with its social account posts inline. |
+| <code>posts_get</code> | Returns one post with its social account posts inline: one per target social account, each with its own `deliveryStatus`. |
 | <code>posts_delete</code> | Deletes one scheduled post by post ID. |
 | <code>social_account_posts_list</code> | Returns standalone social account posts for the API key's organization. |
 | <code>social_account_posts_list_analytics</code> | Returns the organization's social account posts published in a range of UTC days, each with its latest stored metrics. Posts are ordered by `sortBy`, highest first, or newest first when `sortBy` is omitted. |
@@ -40,10 +40,10 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | Tool | Description |
 | --- | --- |
 | <code>media_list</code> | Returns media library items that belong to the API key's organization. |
-| <code>media_delete</code> | Deletes one media item by ID. |
+| <code>media_delete</code> | Deletes one media item and its stored files. |
 | <code>media_uploads_create_session</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts.  Upload the file in `partCount` parts by sending an HTTP PUT with the raw bytes of each part to the matching `parts[n].uploadUrl`. Every part except the last must be exactly `partSizeInBytes` bytes. The last part may be smaller. After all parts have been uploaded, call `media_uploads_complete_session` to finalize the upload and create the media item. The presigned URLs expire at `expiresAt`.  Uploading the parts requires making HTTP requests yourself (for example with curl in a shell or code execution tool). If you cannot make HTTP requests, tell the user the upload is not possible from this client.  The presigned URLs are hosted on Cloudflare R2 (`<account-id>.r2.cloudflarestorage.com`). If a network allowlist blocks the PUT, ask the user to allow `*.r2.cloudflarestorage.com`: - claude.ai / Claude Desktop chat: Settings > Capabilities, in the code execution network settings. - Claude Code: the sandbox's allowed network domains in settings.json. |
-| <code>media_uploads_get_session</code> | Get media upload session status |
-| <code>media_uploads_complete_session</code> | Completes the upload session started by `media_uploads_create_session`. |
+| <code>media_uploads_get_session</code> | Returns the current status of a media upload session. |
+| <code>media_uploads_complete_session</code> | Finalizes an upload session started by `media_uploads_create_session` and creates the media item.  Call it once every part has been uploaded to its `parts[n].uploadUrl`. It returns status `READY` with the new `mediaId`, or `FAILED` with `failureCode` and `failureMessage`. Calling it again on a finished session returns the same result. |
 
 ## Webhooks
 
@@ -51,7 +51,7 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | --- | --- |
 | <code>webhooks_create_endpoint</code> | Registers a URL to receive webhook events for the specified event types. |
 | <code>webhooks_list_endpoints</code> | Returns all registered webhook endpoints for the organization. The `signingSecret` field is omitted. |
-| <code>webhooks_delete_endpoint</code> | Delete webhook endpoint |
+| <code>webhooks_delete_endpoint</code> | Deletes one webhook endpoint, so its URL stops receiving events. |
 
 ## Health
 

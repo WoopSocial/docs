@@ -306,7 +306,10 @@ paths:
         - ApiKey: []
       summary: Get post
       description: |
-        Returns one post with its social account posts inline.
+        Returns one post with its social account posts inline: one per
+        target social account, each with its own `deliveryStatus`.
+
+        Use it after creating a post to see whether each target was published.
       parameters:
         - $ref: "#/components/parameters/PostId"
       responses:
@@ -934,7 +937,9 @@ paths:
         - ApiKey: []
       summary: Delete media
       description: |
-        Deletes one media item by ID.
+        Deletes one media item and its stored files.
+
+        Don't delete media that a post still waiting to publish uses.
       parameters:
         - $ref: "#/components/parameters/MediaId"
       responses:
@@ -1022,6 +1027,14 @@ paths:
       security:
         - ApiKey: []
       summary: Get media upload session status
+      description: |
+        Returns the current status of a media upload session.
+
+        - `INITIATED`: parts can still be uploaded; the session hasn't been completed yet.
+        - `UPLOADED`: all parts arrived and the media item is being created. If it stays here, complete the session again.
+        - `READY`: the media item exists; use its `mediaId` in posts.
+        - `FAILED`: the upload can't be used; `failureCode` and `failureMessage` say why.
+        - `ABORTED`: the session can't be used anymore. Start a new one.
       parameters:
         - $ref: "#/components/parameters/UploadSessionId"
       responses:
@@ -1041,7 +1054,11 @@ paths:
         readOnlyHint: false
         destructiveHint: false
         openWorldHint: false
-      x-woopsocial-mcp-description: Completes the upload session started by `media_uploads_create_session`.
+      x-woopsocial-mcp-description: |
+        Finalizes an upload session started by `media_uploads_create_session` and creates the media item.
+
+        Call it once every part has been uploaded to its `parts[n].uploadUrl`. It returns status `READY` with the new `mediaId`, or `FAILED` with `failureCode` and `failureMessage`.
+        Calling it again on a finished session returns the same result.
       tags:
         - Media
       security:
@@ -1136,10 +1153,15 @@ paths:
       security:
         - ApiKey: []
       summary: Delete webhook endpoint
+      description: |
+        Deletes one webhook endpoint, so its URL stops receiving events.
+
+        To receive events again, register the URL anew. The new endpoint gets
+        a new `signingSecret`.
       parameters:
         - name: webhookId
           in: path
-          description: Webhook endpoint identifier.
+          description: The `id` of a webhook endpoint from List webhook endpoints.
           required: true
           schema:
             type: string
@@ -1237,7 +1259,7 @@ components:
       required: false
       schema:
         type: string
-      description: Filter to resources that belong to a specific project.
+      description: Only return items in this project. Use the `id` of a project from List projects. Omit to include every project.
     ProjectIdsFilter:
       name: projectId
       in: query
@@ -1248,7 +1270,7 @@ components:
         type: array
         items:
           type: string
-      description: Filter to one or more projects. Provide a comma-separated list of project IDs.
+      description: Only return items in these projects. Use project `id`s from List projects.
     SocialAccountIdsFilter:
       name: socialAccountId
       in: query
@@ -1259,7 +1281,7 @@ components:
         type: array
         items:
           type: string
-      description: Filter to one or more connected social accounts. Provide a comma-separated list of social account IDs.
+      description: Only return items for these social accounts. Use social account `id`s from List social accounts.
     PostIdsFilter:
       name: postId
       in: query
@@ -1270,7 +1292,7 @@ components:
         type: array
         items:
           type: string
-      description: Filter to one or more parent posts. Provide a comma-separated list of post IDs.
+      description: Only return the social account posts of these posts. Use the `id` that Create post returned, which social account posts carry as `postId`.
     MediaIdsFilter:
       name: mediaId
       in: query
@@ -1281,7 +1303,7 @@ components:
         type: array
         items:
           type: string
-      description: Filter to one or more media items. Provide a comma-separated list of media IDs.
+      description: Only return these media items. Use media `id`s, or the `mediaId` of a completed upload session.
     SocialPlatformFilter:
       name: platform
       in: query
@@ -1292,7 +1314,7 @@ components:
         type: array
         items:
           $ref: "#/components/schemas/SocialPlatform"
-      description: Filter to one or more social platforms. Provide a comma-separated list of platform values.
+      description: Only return items on these social platforms.
     DeliveryStatusFilter:
       name: deliveryStatus
       in: query
@@ -1303,7 +1325,7 @@ components:
         type: array
         items:
           $ref: "#/components/schemas/DeliveryStatus"
-      description: Filter to one or more delivery statuses. Provide a comma-separated list of delivery status values.
+      description: Only return items in these delivery statuses.
     Limit:
       name: limit
       in: query
@@ -1335,42 +1357,42 @@ components:
       required: true
       schema:
         type: string
-      description: Project identifier.
+      description: The `id` of a project from List projects.
     SocialAccountId:
       name: socialAccountId
       in: path
       required: true
       schema:
         type: string
-      description: Connected social account identifier.
+      description: The `id` of a social account from List social accounts.
     SocialAccountPostId:
       name: socialAccountPostId
       in: path
       required: true
       schema:
         type: string
-      description: Social account post identifier.
+      description: The `socialAccountPostId` of a social account post, from List social account posts or from the `socialAccountPosts` of Get post.
     PostId:
       name: postId
       in: path
       required: true
       schema:
         type: string
-      description: Post identifier.
+      description: The `id` that Create post returned. Social account posts carry it as `postId`.
     UploadSessionId:
       name: uploadSessionId
       in: path
       required: true
       schema:
         type: string
-      description: Media upload session identifier.
+      description: The `uploadSessionId` that Start media upload session returned.
     MediaId:
       name: mediaId
       in: path
       required: true
       schema:
         type: string
-      description: Media identifier.
+      description: The `id` of a media item from List media, or the `mediaId` of a completed upload session.
   securitySchemes:
     ApiKey:
       type: http
@@ -1591,7 +1613,7 @@ components:
       properties:
         projectId:
           type: string
-          description: Project identifier.
+          description: The `id` of the project from List projects that the new social account will join.
         platform:
           $ref: "#/components/schemas/SocialPlatform"
         redirectUrl:
@@ -1806,6 +1828,13 @@ components:
           type: string
           description: Media identifier create by calling [`POST /media/upload-sessions`](/api-reference/media/start-media-upload-session) or [`POST /media`](/api-reference/media/upload-media).
           x-woopsocial-mcp-description: Media library item identifier, returned by `media_uploads_complete_session` or listed by `media_list`.
+        altText:
+          type: string
+          maxLength: 1000
+          description: |
+            Alt text describing the image for people who use screen readers.
+
+            Platforms that don't support image alt text ignore it and validation returns a warning. Pinterest uses only the first image's alt text, up to 500 characters. Ignored when the media is a `cover`.
     PostContentMedia:
       description: |
         Resolved content media.
@@ -1843,6 +1872,9 @@ components:
           type: string
           format: uri
           description: Thumbnail or preview URL for the media item.
+        altText:
+          type: string
+          description: Alt text set for this media item in the post. Omitted when none was set.
     PostContentItemInput:
       type: object
       additionalProperties: false
