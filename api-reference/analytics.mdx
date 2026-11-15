@@ -1,0 +1,101 @@
+---
+title: 'Analytics'
+description: 'See how your posts and social accounts perform'
+---
+
+WoopSocial collects analytics from each platform about once a day. Reading analytics doesn't refresh them.
+
+## Post analytics
+
+[List social account post analytics](/api-reference/posts/list-social-account-post-analytics) returns the posts published in a range of UTC days, each with its latest metrics. Metrics are lifetime totals since the post was published. Use `sortBy` to rank posts by a metric, and filter by project, social account or platform.
+
+```bash Request
+curl "https://api.woopsocial.com/v1/social-account-posts/analytics?startDate=2026-11-01&endDate=2026-11-14&sortBy=views" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```json Response
+{
+  "socialAccountPosts": [
+    {
+      "socialAccountPostId": "190000000000000003",
+      "postId": "190000000000000002",
+      "socialAccountId": "190000000000000001",
+      "platform": "INSTAGRAM",
+      "deliveryCompletedAt": "2026-11-03T09:00:00Z",
+      "externalPostUrl": "https://www.instagram.com/p/EXAMPLE/",
+      "text": "Our autumn collection is here",
+      "metrics": {
+        "views": 1520,
+        "likes": 87,
+        "comments": 6,
+        "shares": 4,
+        "saves": 11
+      },
+      "metricsCollectedAt": "2026-11-14T06:12:00Z"
+    }
+  ]
+}
+```
+
+## Account analytics
+
+[Get social account analytics](/api-reference/social-accounts/get-social-account-analytics) returns one social account's metrics over a range of UTC days, one point per day. It covers followers and the activity across all of the account's content, not just posts sent through WoopSocial. The most recent days appear once the platform has finished counting them, usually within two days.
+
+```bash Request
+curl "https://api.woopsocial.com/v1/social-accounts/SOCIAL_ACCOUNT_ID/analytics?startDate=2026-11-11&endDate=2026-11-13" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```json Response
+{
+  "socialAccountId": "190000000000000004",
+  "platform": "FACEBOOK",
+  "metrics": {
+    "followers": {
+      "latest": 1204,
+      "change": 9,
+      "points": [
+        { "date": "2026-11-11", "value": 1195 },
+        { "date": "2026-11-12", "value": 1201 },
+        { "date": "2026-11-13", "value": 1204 }
+      ]
+    },
+    "views": {
+      "total": 3870,
+      "points": [
+        { "date": "2026-11-11", "value": 1240 },
+        { "date": "2026-11-12", "value": 1415 },
+        { "date": "2026-11-13", "value": 1215 }
+      ]
+    },
+    "engagements": {
+      "total": 212,
+      "points": [
+        { "date": "2026-11-11", "value": 68 },
+        { "date": "2026-11-12", "value": 81 },
+        { "date": "2026-11-13", "value": 63 }
+      ]
+    }
+  }
+}
+```
+
+`followers` gives the count on each day. The other metrics count the activity on each day, and `total` adds those days up.
+
+## Platform support
+
+| Platform | Post analytics | Account analytics |
+|---|---|---|
+| Facebook | ✅ | ✅ |
+| Instagram | ✅ | ✅ |
+| Threads | ✅ | ✅ |
+| LinkedIn (personal) | ❌ | ❌ |
+| LinkedIn Pages | ✅ | ✅ |
+| Bluesky | ✅ | ❌ |
+| X | ❌ | ❌ |
+| Pinterest | ✅ | ✅ |
+| TikTok | ✅ | ✅ |
+| YouTube | ✅ | ✅ |
+
+Each endpoint's reference lists which metrics each platform reports.
