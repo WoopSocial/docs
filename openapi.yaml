@@ -802,6 +802,11 @@ paths:
         - `LINKEDIN_PAGES`: followers, impressions, engagements, likes, comments, shares, clicks.
         - `PINTEREST`: followers, impressions, engagements, saves, clicks, views (video views).
         - `YOUTUBE`: followers (subscribers), views, likes, comments, shares.
+        - `TIKTOK`: followers, views, likes, comments, shares. Only accounts
+          connected through the TikTok for Business app collect them.
+        - `THREADS`: followers, likes, comments (replies), shares (reposts and
+          quotes), clicks. Followers start on the day the account is first
+          collected, since Threads reports no follower history.
         - Other platforms have no account analytics and return empty `metrics`.
       parameters:
         - $ref: "#/components/parameters/SocialAccountId"
