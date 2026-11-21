@@ -513,6 +513,90 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeleteSocialAccountPostErrorResponse"
+    patch:
+      operationId: updateSocialAccountPost
+      x-woopsocial-mcp-tool-name: social_account_posts_update
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: true
+        openWorldHint: true
+        idempotentHint: true
+      tags:
+        - Posts
+      security:
+        - ApiKey: []
+      summary: Update social account post
+      description: |
+        Updates the content or schedule of one social account post.
+
+        Only a social account post whose `deliveryStatus` is `NOT_STARTED` can
+        be updated. Its ID stays the same.
+
+        Each field you send replaces that whole field. Fields you omit stay
+        unchanged. The result is validated with the same rules as
+        [`POST /posts`](/api-reference/posts/create-post).
+
+        The parent post's `content` and `schedule` don't change. They are only
+        defaults: each social account post publishes its own content on its own
+        schedule.
+      parameters:
+        - $ref: "#/components/parameters/SocialAccountPostId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSocialAccountPostRequest"
+            examples:
+              Text:
+                summary: Change the text
+                description: Replace the content with new text and media.
+                value:
+                  content:
+                    - text: "<string>"
+                      media:
+                        - type: MEDIA_LIBRARY
+                          mediaId: "<string>"
+              Reschedule:
+                summary: Reschedule
+                description: Move the social account post to a new time.
+                value:
+                  schedule:
+                    type: SCHEDULE_FOR_LATER
+                    scheduledFor: "2030-01-01T09:00:00Z"
+      responses:
+        "200":
+          description: Social account post updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SocialAccountPost"
+        "404":
+          description: Social account post not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateSocialAccountPostErrorResponse"
+        "409":
+          description: The social account post has started delivery, so it can't be updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateSocialAccountPostErrorResponse"
+        "422":
+          description: Request validation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateSocialAccountPostErrorResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
+        "500":
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateSocialAccountPostErrorResponse"
   /projects:
     post:
       operationId: createProject
@@ -921,6 +1005,45 @@ paths:
       responses:
         "200":
           description: Media uploaded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateMediaResponse"
+        "429":
+          $ref: "#/components/responses/TooManyConcurrentRequests"
+  /media/imports:
+    post:
+      operationId: importMedia
+      x-woopsocial-mcp-tool-name: media_import
+      x-woopsocial-mcp-clients:
+        - openai-mcp
+      x-woopsocial-mcp-annotations:
+        readOnlyHint: false
+        destructiveHint: false
+        openWorldHint: true
+      x-woopsocial-mcp-description: |
+        Imports a file attached to this chat into a project's media library and returns its `mediaId` for use in posts.
+        Call it once per attached file. For a file on disk, use `media_uploads_create_session` instead.
+      tags:
+        - Media
+      security:
+        - ApiKey: []
+      summary: Import media from URL
+      description: |
+        Downloads the file at `url` and creates a media item from it.
+
+        The URL must serve the file to a plain `GET` request, without
+        credentials. A presigned URL works. The server determines the media
+        MIME type from the file. Maximum size is 5 GB.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImportMediaRequest"
+      responses:
+        "200":
+          description: Media imported.
           content:
             application/json:
               schema:
@@ -1671,6 +1794,7 @@ components:
       additionalProperties: false
       required:
         - id
+        - projectId
         - externalAccountId
         - platform
         - username
@@ -1680,6 +1804,9 @@ components:
         id:
           type: string
           description: Social account identifier.
+        projectId:
+          type: string
+          description: Project this social account belongs to. Media used in its posts must be in the same project.
         externalAccountId:
           type: string
           description: Platform-specific account, page, profile, or channel identifier.
@@ -2140,6 +2267,22 @@ components:
         mediaId:
           type: string
           description: Media identifier.
+    ImportMediaRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - projectId
+        - url
+      properties:
+        projectId:
+          type: string
+          description: Project that will own the imported media.
+        url:
+          type: string
+          format: uri
+          description: Public `http` or `https` URL of the file.
+          x-woopsocial-mcp-openai-file-param: file
+          x-woopsocial-mcp-description: The file attached to this chat.
     CreateUploadSessionRequest:
       type: object
       additionalProperties: false
@@ -3305,6 +3448,51 @@ components:
           $ref: "#/components/schemas/DeleteSocialAccountPostErrorCode"
         message:
           type: string
+    UpdateSocialAccountPostRequest:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      description: |
+        The fields to change. Each field you send replaces that whole field.
+        Fields you omit stay unchanged. At least one field is required.
+      properties:
+        content:
+          $ref: "#/components/schemas/PostContentInput"
+          description: The social account post's new content.
+        schedule:
+          $ref: "#/components/schemas/PostSchedule"
+          description: The social account post's new schedule.
+    UpdateSocialAccountPostErrorCode:
+      type: string
+      enum:
+        - SOCIAL_ACCOUNT_POST_NOT_FOUND
+        - SOCIAL_ACCOUNT_POST_NOT_EDITABLE
+        - SOCIAL_ACCOUNT_NOT_CONNECTED
+        - INVALID_MEDIA_ID
+        - VALIDATION_FAILED
+        - INTERNAL_ERROR
+    UpdateSocialAccountPostErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: "#/components/schemas/UpdateSocialAccountPostErrorCode"
+        message:
+          type: string
+        deliveryStatus:
+          $ref: "#/components/schemas/DeliveryStatus"
+          description: |
+            The social account post's delivery status.
+
+            Returned when `code` is `SOCIAL_ACCOUNT_POST_NOT_EDITABLE`.
+        validationErrors:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+          description: Field-level validation failures. Omitted when not applicable.
     DeleteSocialAccountErrorCode:
       type: string
       enum:

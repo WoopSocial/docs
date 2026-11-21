@@ -16,6 +16,7 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | <code>social_account_posts_list</code> | Returns standalone social account posts for the API key's organization. |
 | <code>social_account_posts_list_analytics</code> | Returns the organization's social account posts published in a range of UTC days, each with its latest stored metrics. Posts are ordered by `sortBy`, highest first, or newest first when `sortBy` is omitted. |
 | <code>social_account_posts_delete</code> | Deletes one social account post by ID. |
+| <code>social_account_posts_update</code> | Updates the content or schedule of one social account post. |
 
 ## Projects
 
@@ -40,6 +41,7 @@ description: "Tool names exposed by the WoopSocial MCP server"
 | Tool | Description |
 | --- | --- |
 | <code>media_list</code> | Returns media library items that belong to the API key's organization. |
+| <code>media_import</code> | Imports a file attached to this chat into a project's media library and returns its `mediaId` for use in posts. Call it once per attached file. For a file on disk, use `media_uploads_create_session` instead. |
 | <code>media_delete</code> | Deletes one media item and its stored files. |
 | <code>media_uploads_create_session</code> | This endpoint can be used to upload both smaller and larger files (up to 5GB) in a chunked manner. Calling this creates an upload session and returns presigned URLs for uploading the file in parts.  Upload the file in `partCount` parts by sending an HTTP PUT with the raw bytes of each part to the matching `parts[n].uploadUrl`. Every part except the last must be exactly `partSizeInBytes` bytes. The last part may be smaller. After all parts have been uploaded, call `media_uploads_complete_session` to finalize the upload and create the media item. The presigned URLs expire at `expiresAt`.  Uploading the parts requires making HTTP requests yourself (for example with curl in a shell or code execution tool). If you cannot make HTTP requests, tell the user the upload is not possible from this client.  The presigned URLs are hosted on Cloudflare R2 (`<account-id>.r2.cloudflarestorage.com`). If a network allowlist blocks the PUT, ask the user to allow `*.r2.cloudflarestorage.com`: - claude.ai / Claude Desktop chat: Settings > Capabilities, in the code execution network settings. - Claude Code: the sandbox's allowed network domains in settings.json. |
 | <code>media_uploads_get_session</code> | Returns the current status of a media upload session. |
