@@ -45,7 +45,18 @@ The connector belongs to your Claude account, so you only add it once.
   **Can't use the directory?** Add WoopSocial as a custom connector instead. Go to **Customize** → **Connectors** → **+ Add** → **Add custom connector**, name it `woopsocial`, use `https://api.woopsocial.com/mcp` as the URL and follow the prompts. On Team and Enterprise plans, an owner adds connectors in **Organization settings** → **Connectors**.
 </Note>
 
-**Note:** Text posts work in any chat. To upload images and videos from a chat, Claude needs internet access and `*.r2.cloudflarestorage.com` (including the asterisk/star) in its allowed websites, since that's where your media is stored. See [Media upload fix](#media-upload-fix) for the steps.
+### Uploading images and videos {#media-upload-fix}
+
+Text posts work in any chat. To upload images and videos, Claude needs internet access and `*.r2.cloudflarestorage.com` (including the asterisk/star) in its allowed websites, since that's where your media is stored:
+
+1. Go to **Settings** → **Capabilities** → **Create and edit files** and turn on **Use the internet while making files**
+2. Next to **Allowed websites**, click **Manage**
+3. Type `*.r2.cloudflarestorage.com` and click **Add**
+4. Start a new chat and ask Claude to upload your media again
+
+![Turn on internet access and open Allowed websites in Claude](/images/social-media-mcp/Claude%20media%20upload%20settings%201.png)
+
+![Add *.r2.cloudflarestorage.com to Claude's allowed websites](/images/social-media-mcp/Claude%20media%20upload%20settings%202.png)
 
 ## Claude Code CLI {#claude-code}
 
@@ -66,6 +77,8 @@ claude mcp add --transport http woopsocial "https://api.woopsocial.com/mcp"
 7. This should take you to WoopSocial where you can Authorize the MCP connection. Click the "**Authorize**" button.
 8. Return to Claude
 9. Ask Claude to do something with the MCP. For example tell it to "List my social accounts in woopsocial" or "Create a new post for my Facebook account and schedule it for tomorrow 1pm"
+
+If media uploads are blocked, add `*.r2.cloudflarestorage.com` to the sandbox's allowed network domains in `settings.json`.
 
 ## Codex CLI {#codex}
 
@@ -151,20 +164,3 @@ https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY
 5. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
 6. Return to your AI agent
 7. Ask your AI agent to do something with the MCP. For example tell it to "List my social accounts in woopsocial" or "Create a new post for my Facebook account and schedule it for tomorrow 1pm"
-
-# Media upload fix for Claude and ChatGPT {#media-upload-fix}
-
-If the client has an allowlist for outbound domains, add `*.r2.cloudflarestorage.com` so media uploads work.
-
-**claude.ai and Claude Desktop:**
-
-1. Go to **Settings** → **Capabilities** → **Create and edit files** and turn on **Use the internet while making files**
-2. Next to **Allowed websites**, click **Manage**
-3. Type `*.r2.cloudflarestorage.com` and click **Add**
-4. Start a new chat and ask Claude to upload your media again
-
-![Turn on internet access and open Allowed websites in Claude](/images/social-media-mcp/Claude%20media%20upload%20settings%201.png)
-
-![Add *.r2.cloudflarestorage.com to Claude's allowed websites](/images/social-media-mcp/Claude%20media%20upload%20settings%202.png)
-
-**Claude Code:** add it to the sandbox's allowed network domains in `settings.json`.
