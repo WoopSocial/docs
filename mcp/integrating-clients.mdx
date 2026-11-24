@@ -22,6 +22,10 @@ Use this page to connect the WoopSocial MCP server to your AI agent, Claude, Cha
 - [Cursor](#cursor)
 - [Other AI agents](#ai-agents)
 
+<Tip>
+  Stuck? Use the chat button in the bottom right and we'll help you out.
+</Tip>
+
 ## Claude (web, Desktop, Cowork) {#claude-cowork}
 
 WoopSocial is listed in Claude's Connectors Directory as a Community connector. You don't need an API key or an MCP URL.
@@ -43,8 +47,6 @@ The connector belongs to your Claude account, so you only add it once.
 
 **Note:** Text posts work in any chat. To upload images and videos from a chat, Claude needs internet access and `*.r2.cloudflarestorage.com` (including the asterisk/star) in its allowed websites, since that's where your media is stored. See [Media upload fix](#media-upload-fix) for the steps.
 
-Issues? Just use the chat button in the bottom right and we’ll help you out.
-
 ## Claude Code CLI {#claude-code}
 
 If you added the [Claude connector](#claude-cowork) and sign in to Claude Code with the same Claude account, WoopSocial is already available. Type `/mcp` in Claude Code to check.
@@ -65,8 +67,6 @@ claude mcp add --transport http woopsocial "https://api.woopsocial.com/mcp"
 8. Return to Claude
 9. Ask Claude to do something with the MCP. For example tell it to "List my social accounts in woopsocial" or "Create a new post for my Facebook account and schedule it for tomorrow 1pm"
 
-Issues? Just use the chat button in the bottom right and we’ll help you out.
-
 ## Codex CLI {#codex}
 
 1. Ensure that you have a [WoopSocial account](https://app.woopsocial.com) and you are logged in
@@ -80,8 +80,6 @@ codex mcp login woopsocial
 
 4. This should take you to WoopSocial where you can Authorize the MCP connection. Click the "**Authorize**" button.
 5. Ask Codex to do something with the MCP. For example tell it to "List my social accounts in woopsocial" or "Create a new post for my Facebook account and schedule it for tomorrow 1pm"
-
-Issues? Just use the chat button in the bottom right and we’ll help you out.
 
 ## ChatGPT {#chatgpt}
 
@@ -101,8 +99,6 @@ The plugin belongs to your ChatGPT account, so you only add it once.
   **Can't use the directory?** Add WoopSocial as a custom MCP server instead. Go to [chatgpt.com/plugins](https://chatgpt.com/plugins) → **Add** → **Add custom MCP server**, name it `WoopSocial`, use `https://api.woopsocial.com/mcp` as the Server URL with **OAuth**, tick **I understand**, then click **Create as a plugin** and **Connect**.
 </Note>
 
-Issues? Just use the chat button in the bottom right and we’ll help you out.
-
 ## Notion {#notion}
 
 1. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
@@ -112,8 +108,6 @@ Issues? Just use the chat button in the bottom right and we’ll help you out.
 5. Click **Connect**, then sign in to WoopSocial and click **Authorize**
 6. Ask the chat to “Find my project ID and find my social account IDs with the Woopsocial tools. Then schedule a test post for tomorrow”
 7. Delete the test post and start creating your own content
-
-Issues? Just use the chat button in the bottom right and we’ll help you out.
 
 ## Gemini CLI {#gemini-cli}
 
@@ -125,8 +119,6 @@ Issues? Just use the chat button in the bottom right and we’ll help you out.
 4. Put the following prompt in Gemini: “Find my project ID and find my social account IDs with the Woopsocial tools. Then schedule a test post for tomorrow”
 5. Delete the test post and start creating your own content
 
-Issues? Just use the chat button in the bottom right and we’ll help you out.
-
 ## Cursor {#cursor}
 
 1. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
@@ -135,8 +127,6 @@ Issues? Just use the chat button in the bottom right and we’ll help you out.
 4. Run through the authorization sequence
 5. Put the following prompt in Cursor: “Find my project ID and find my social account IDs with the Woopsocial tools. Then schedule a test post for tomorrow”
 6. Delete the test post and start creating your own content
-
-Issues? Just use the chat button in the bottom right and we’ll help you out.
 
 ## Get your MCP URL for other AI agents {#ai-agents}
 
@@ -161,8 +151,6 @@ https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY
 5. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
 6. Return to your AI agent
 7. Ask your AI agent to do something with the MCP. For example tell it to "List my social accounts in woopsocial" or "Create a new post for my Facebook account and schedule it for tomorrow 1pm"
-
-Issues? Just use the chat button in the bottom right and we’ll help you out.
 
 # Media upload fix for Claude and ChatGPT {#media-upload-fix}
 
