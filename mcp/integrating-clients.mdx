@@ -39,7 +39,7 @@ The connector belongs to your Claude account, so you only add it once.
 
 **Can't use the directory?** Add WoopSocial as a custom connector instead. Go to **Customize** → **Connectors** → **+ Add** → **Add custom connector**, name it `woopsocial`, use `https://api.woopsocial.com/mcp` as the URL and follow the prompts. On Team and Enterprise plans, an owner adds connectors in **Organization settings** → **Connectors**.
 
-**Note:** Text posts work in any chat. To upload images and videos from a chat, Claude needs code execution turned on and access to `*.r2.cloudflarestorage.com` (including the asterisk/star), where your media is stored. You can set both in **Settings** → **Capabilities**, in the code execution network settings.
+**Note:** Text posts work in any chat. To upload images and videos from a chat, Claude needs internet access and `*.r2.cloudflarestorage.com` (including the asterisk/star) in its allowed websites, since that's where your media is stored. See [Media upload fix](#media-upload-fix) for the steps.
 
 Issues? Just use the chat button in the bottom right and we’ll help you out.
 
@@ -172,6 +172,18 @@ https://api.woopsocial.com/mcp?api_key=YOUR_API_KEY
 
 Issues? Just use the chat button in the bottom right and we’ll help you out.
 
-# Media upload fix for Claude and ChatGPT
+# Media upload fix for Claude and ChatGPT {#media-upload-fix}
 
-If the client has an allowlist for outbound domains, add `*.r2.cloudflarestorage.com` so media uploads work. In Claude Code, add it to the sandbox's allowed network domains in `settings.json`.
+If the client has an allowlist for outbound domains, add `*.r2.cloudflarestorage.com` so media uploads work.
+
+**claude.ai and Claude Desktop:**
+
+1. Go to **Settings** → **Capabilities** → **Create and edit files** and turn on **Use the internet while making files**
+2. Next to **Allowed websites**, click **Manage**, type `*.r2.cloudflarestorage.com` and click **Add**
+3. Start a new chat and ask Claude to upload your media again
+
+![Turn on internet access and open Allowed websites in Claude](/images/social-media-mcp/Claude%20media%20upload%20settings%201.png)
+
+![Add *.r2.cloudflarestorage.com to Claude's allowed websites](/images/social-media-mcp/Claude%20media%20upload%20settings%202.png)
+
+**Claude Code:** add it to the sandbox's allowed network domains in `settings.json`.

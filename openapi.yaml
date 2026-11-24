@@ -1109,7 +1109,8 @@ paths:
 
         The presigned URLs are hosted on Cloudflare R2 (`<account-id>.r2.cloudflarestorage.com`).
         If a network allowlist blocks the PUT, ask the user to allow `*.r2.cloudflarestorage.com`:
-        - claude.ai / Claude Desktop chat: Settings > Capabilities, in the code execution network settings.
+        - claude.ai / Claude Desktop chat: Settings > Capabilities > Create and edit files. Turn on "Use the internet while making files",
+          then next to "Allowed websites" click Manage and add `*.r2.cloudflarestorage.com`.
         - Claude Code: the sandbox's allowed network domains in settings.json.
       tags:
         - Media
