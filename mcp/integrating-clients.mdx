@@ -37,7 +37,9 @@ WoopSocial is listed in Claude's Connectors Directory as a Community connector. 
 
 The connector belongs to your Claude account, so you only add it once.
 
-**Can't use the directory?** Add WoopSocial as a custom connector instead. Go to **Customize** → **Connectors** → **+ Add** → **Add custom connector**, name it `woopsocial`, use `https://api.woopsocial.com/mcp` as the URL and follow the prompts. On Team and Enterprise plans, an owner adds connectors in **Organization settings** → **Connectors**.
+<Note>
+  **Can't use the directory?** Add WoopSocial as a custom connector instead. Go to **Customize** → **Connectors** → **+ Add** → **Add custom connector**, name it `woopsocial`, use `https://api.woopsocial.com/mcp` as the URL and follow the prompts. On Team and Enterprise plans, an owner adds connectors in **Organization settings** → **Connectors**.
+</Note>
 
 **Note:** Text posts work in any chat. To upload images and videos from a chat, Claude needs internet access and `*.r2.cloudflarestorage.com` (including the asterisk/star) in its allowed websites, since that's where your media is stored. See [Media upload fix](#media-upload-fix) for the steps.
 
@@ -83,31 +85,21 @@ Issues? Just use the chat button in the bottom right and we’ll help you out.
 
 ## ChatGPT {#chatgpt}
 
-1. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
-2. Now go to your ChatGPT dashboard
-3. Open `Settings`.
+WoopSocial is listed in ChatGPT's plugin directory. You don't need an API key or an MCP URL.
 
-![Open ChatGPT settings](/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%201.png)
-
-4. Open `Apps`.
-5. Enable `Developer Mode` if it is not already enabled.
-
-![Enable Developer Mode in ChatGPT](/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%202.png)
-
-6. Select `Create App`.
-7. Enter these values:
-
-- Name: `WoopSocial`
-- Description: `Publish social media content`
-- MCP Server URL: `https://api.woopsocial.com/mcp`
-- Authentication: `OAuth`
-
-8. Save the app.
-9. This should take you to WoopSocial where you can Authorize the MCP connection. Click the "**Authorize**" button.
-10. Return to ChatGPT and start a new chat
-11. Ask ChatGPT to do something with the MCP. For example tell it to "List my social accounts in woopsocial" or "Create a new post for my Facebook account and schedule it for tomorrow 1pm"
+1. Open the [WoopSocial plugin](https://chatgpt.com/plugins/plugin_asdk_app_6ae20d28f30c81919992b6b198b05d2b) in ChatGPT's plugin directory and connect it. If you aren't signed in to ChatGPT, you'll be asked to sign in first.
+2. Sign in to WoopSocial, or create a free account, and click **Authorize**
+3. Make sure you have at least one social media account connected ([Connect accounts in your dashboard](https://app.woopsocial.com))
+4. **Start a new chat** in ChatGPT and pick WoopSocial by typing `@` and its name
+5. Ask ChatGPT to do something with WoopSocial. For example tell it to "List my social accounts in woopsocial" or "Create a new post for my Facebook account and schedule it for tomorrow 1pm"
 
 ![Test the ChatGPT app by listing social accounts](/images/social-media-mcp/ChatGPT%20Social%20Media%20MCP%20setup%20image%204.png)
+
+The plugin belongs to your ChatGPT account, so you only add it once.
+
+<Note>
+  **Can't use the directory?** Add WoopSocial as a custom MCP server instead. Go to [chatgpt.com/plugins](https://chatgpt.com/plugins) → **Add** → **Add custom MCP server**, name it `WoopSocial`, use `https://api.woopsocial.com/mcp` as the Server URL with **OAuth**, tick **I understand**, then click **Create as a plugin** and **Connect**.
+</Note>
 
 Issues? Just use the chat button in the bottom right and we’ll help you out.
 
